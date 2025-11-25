@@ -1,0 +1,3256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Assembyl MVP UI Prototype</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+            /* default = dark mode */
+            color-scheme: dark;
+
+            --brand-bg: #050816;
+            --brand-accent: #22c55e;
+            --brand-accent-soft: rgba(34, 197, 94, 0.12);
+            --primary: #2563eb;
+            --primary-soft: rgba(37, 99, 235, 0.12);
+            --danger: #dc2626;
+            --danger-soft: rgba(220, 38, 38, 0.12);
+            --warning: #eab308;
+            --warning-soft: rgba(234, 179, 8, 0.12);
+
+            /* theme-dependent tokens */
+            --app-bg: radial-gradient(circle at top, #111827 0, #020617 38%, #000 100%);
+            --bg: #0f172a;
+            --bg-elevated: #020617;
+            --border-subtle: #1e293b;
+            --card-bg: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), #020617);
+            --card-bg-muted: rgba(15, 23, 42, 0.85);
+            --text: #e5e7eb;
+            --text-soft: #9ca3af;
+            --muted: #6b7280;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+            --sidebar-width: 260px;
+
+            --radius-lg: 16px;
+            --radius-pill: 999px;
+        }
+
+        /* LIGHT MODE OVERRIDES */
+        :root[data-theme="light"] {
+            color-scheme: light;
+
+            --app-bg: radial-gradient(circle at top, #e5f0ff 0, #f9fafb 50%, #e5e7eb 100%);
+            --bg: #f3f4f6;
+            --bg-elevated: #ffffff;
+            --border-subtle: #d1d5db;
+            --card-bg: #ffffff;
+            --card-bg-muted: #f9fafb;
+            --text: #020617;
+            --text-soft: #6b7280;
+            --muted: #9ca3af;
+            --shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--app-bg);
+            color: var(--text);
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* LOGIN GATE */
+
+        .login-gate {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+            background: var(--bg-elevated);
+            color: var(--text);
+        }
+
+        .login-left {
+            background: radial-gradient(circle at top, rgba(34, 197, 94, 0.2) 0, var(--bg) 45%, #000 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-logo {
+            width: 180px;
+            height: 180px;
+            border-radius: 32px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top, #22c55e22, var(--bg-elevated));
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .login-org-text {
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            color: var(--text-soft);
+            text-align: center;
+            max-width: 320px;
+        }
+
+        .login-right {
+            padding: 3rem 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: var(--bg-elevated);
+        }
+
+        .login-form-card {
+            max-width: 420px;
+            margin-left: auto;
+        }
+
+        .login-title {
+            font-size: 1.6rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .login-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-soft);
+            margin-bottom: 1.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        :root[data-theme="light"] .form-input {
+            background: #f9fafb;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.4);
+            background: rgba(15, 23, 42, 1);
+        }
+
+        :root[data-theme="light"] .form-input:focus {
+            background: #ffffff;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #2563eb, #22c55e);
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+            box-shadow: 0 18px 36px rgba(37, 99, 235, 0.55);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.4);
+        }
+
+        .link-inline {
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .login-footer {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-align: right;
+        }
+
+        .login-footer span {
+            opacity: 0.85;
+        }
+
+        .powered-watermark {
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 900px) {
+            .login-gate {
+                grid-template-columns: 1fr;
+            }
+
+            .login-left {
+                display: none;
+            }
+
+            .login-right {
+                padding: 2.4rem 1.5rem;
+            }
+
+            .login-form-card {
+                margin: 0 auto;
+            }
+        }
+
+        /* APP SHELL */
+
+        .app-shell {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .app-shell.active {
+            display: grid;
+        }
+
+        @media (min-width: 960px) {
+            .app-shell {
+                grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+            }
+        }
+
+        @media (max-width: 959px) {
+            .app-shell {
+                grid-template-rows: auto minmax(0, 1fr);
+            }
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, var(--bg-elevated), var(--bg-elevated) 50%, var(--bg-elevated));
+            border-right: 1px solid var(--border-subtle);
+            padding: 1.2rem 1rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-logo-mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            background: radial-gradient(circle at top, #22c55e55, var(--bg-elevated));
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-logo-text {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.85rem;
+        }
+
+        .sidebar-logo-text span:first-child {
+            font-weight: 600;
+        }
+
+        .sidebar-logo-text span:last-child {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+        }
+
+        .sidebar-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin: 1rem 0 0.25rem;
+        }
+
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .nav-item {
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-soft);
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: background 0.12s ease, border 0.12s ease, color 0.12s ease, transform 0.08s ease;
+        }
+
+        .nav-item span.icon {
+            font-size: 1rem;
+        }
+
+        .nav-item:hover {
+            background: rgba(15, 23, 42, 0.95);
+            color: var(--text);
+            border-color: rgba(148, 163, 184, 0.35);
+        }
+
+        :root[data-theme="light"] .nav-item:hover {
+            background: #e5e7eb;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(34, 197, 94, 0.18));
+            border-color: rgba(37, 99, 235, 0.7);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .sidebar-flex-bottom {
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .sidebar-flex-bottom .badge-role {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            font-size: 0.75rem;
+            margin-top: 0.35rem;
+        }
+
+        .sidebar-flex-bottom .badge-role span {
+            font-size: 0.8rem;
+        }
+
+        .main-area {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.2rem;
+            border-bottom: 1px solid var(--border-subtle);
+            background: rgba(2, 6, 23, 0.96);
+            backdrop-filter: blur(14px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        :root[data-theme="light"] .topbar {
+            background: rgba(249, 250, 251, 0.96);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+        }
+
+        .topbar-org {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .topbar-subtle {
+            font-size: 0.8rem;
+            color: var(--text-soft);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .mode-toggle {
+            display: inline-flex;
+            border-radius: 999px;
+            padding: 0.15rem;
+            border: 1px solid var(--border-subtle);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        :root[data-theme="light"] .mode-toggle {
+            background: #e5e7eb;
+        }
+
+        .mode-toggle button {
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            background: transparent;
+            color: var(--text-soft);
+        }
+
+        .mode-toggle button.active {
+            background: rgba(37, 99, 235, 0.22);
+            color: white;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-subtle);
+            font-size: 0.8rem;
+        }
+
+        :root[data-theme="light"] .user-pill {
+            background: #ffffff;
+        }
+
+        .user-avatar {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #2563eb, #22c55e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 1.3rem 1.4rem 1.6rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .screen-header {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .screen-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .screen-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            margin-top: 0.15rem;
+        }
+
+        .screen-header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .pill {
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-soft);
+        }
+
+        .pill-green {
+            border-color: rgba(34, 197, 94, 0.5);
+            background: var(--brand-accent-soft);
+            color: #bbf7d0;
+        }
+
+        /* Generic layout helpers */
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @media (max-width: 1024px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+
+            .grid-4,
+            .grid-3,
+            .grid-2 {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .content {
+                padding: 1rem;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+            padding: 0.9rem 1rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .card-muted {
+            background: var(--card-bg-muted);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            color: var(--text-soft);
+        }
+
+        .card-value {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .kpi-icon {
+            font-size: 1.1rem;
+            margin-right: 0.35rem;
+        }
+
+        .kpi-positive {
+            color: #4ade80;
+        }
+
+        .kpi-negative {
+            color: #f97373;
+        }
+
+        .small-label {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+        }
+
+        .small-tag {
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            font-size: 0.7rem;
+            color: var(--text-soft);
+        }
+
+        .list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            padding: 0.45rem 0.2rem;
+            font-size: 0.85rem;
+            border-bottom: 1px dashed rgba(30, 64, 175, 0.4);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .badge-status {
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            border: 1px solid transparent;
+        }
+
+        .badge-status--present {
+            background: var(--brand-accent-soft);
+            border-color: rgba(34, 197, 94, 0.7);
+            color: #bbf7d0;
+        }
+
+        .badge-status--late {
+            background: var(--warning-soft);
+            border-color: rgba(234, 179, 8, 0.7);
+            color: #facc15;
+        }
+
+        .badge-status--absent {
+            background: var(--danger-soft);
+            border-color: rgba(220, 38, 38, 0.7);
+            color: #fecaca;
+        }
+
+        /* DASHBOARD (2.1 Chairman’s Dashboard) */
+
+        .kpi-row {
+            margin-bottom: 1.2rem;
+        }
+
+        .recent-activity,
+        .debtors-watchlist {
+            margin-top: 1rem;
+        }
+
+        .debtors-watchlist .list-item span:first-child {
+            color: #fecaca;
+        }
+
+        /* FINANCE MODULE (3.x) */
+
+        .layout-two-column {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 900px) {
+            .layout-two-column {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .member-list {
+            max-height: 480px;
+            overflow: auto;
+            padding-right: 0.25rem;
+        }
+
+        .member-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.4rem 0.35rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+            transition: background 0.12s ease, transform 0.08s ease;
+        }
+
+        .member-row:hover {
+            background: rgba(15, 23, 42, 0.95);
+            transform: translateY(-1px);
+        }
+
+        :root[data-theme="light"] .member-row:hover {
+            background: #e5e7eb;
+        }
+
+        .member-row.active {
+            background: rgba(37, 99, 235, 0.13);
+        }
+
+        .member-row-balance.negative {
+            color: #fca5a5;
+        }
+
+        .member-row-balance.positive {
+            color: #4ade80;
+        }
+
+        .member-search {
+            margin-bottom: 0.7rem;
+        }
+
+        .member-avatar-sm {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #1d4ed8, #22c55e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.4rem;
+        }
+
+        .ledger-member-context {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .ledger-member-meta {
+            font-size: 0.85rem;
+        }
+
+        .ledger-member-meta div:first-child {
+            font-weight: 600;
+        }
+
+        .ledger-debt {
+            font-size: 0.8rem;
+            color: var(--text-soft);
+        }
+
+        .ledger-debt span {
+            color: #fca5a5;
+            font-weight: 500;
+        }
+
+        .amount-input {
+            margin-bottom: 0.8rem;
+        }
+
+        .amount-input input {
+            width: 100%;
+            padding: 1rem 1.1rem;
+            font-size: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-subtle);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 1), var(--bg-elevated));
+            color: var(--text);
+            outline: none;
+        }
+
+        :root[data-theme="light"] .amount-input input {
+            background: #f9fafb;
+        }
+
+        .amount-input input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .pill-option {
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: var(--text-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        :root[data-theme="light"] .pill-option {
+            background: #f3f4f6;
+        }
+
+        .pill-option.active {
+            border-color: rgba(37, 99, 235, 0.8);
+            background: rgba(37, 99, 235, 0.18);
+            color: white;
+        }
+
+        .ledger-actions {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .btn-secondary {
+            padding: 0.55rem 0.95rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text-soft);
+            border: 1px solid var(--border-subtle);
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        :root[data-theme="light"] .btn-secondary {
+            background: #f3f4f6;
+        }
+
+        .btn-primary-wide {
+            padding: 0.7rem 1.2rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #22c55e, #2563eb);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            box-shadow: 0 14px 30px rgba(34, 197, 94, 0.4);
+        }
+
+        /* MODAL (3.2 Receipt Success Modal) */
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+        }
+
+        .modal {
+            background: radial-gradient(circle at top, rgba(34, 197, 94, 0.1), var(--bg-elevated));
+            border-radius: 20px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            padding: 1.4rem 1.6rem;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+        }
+
+        .checkmark-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 999px;
+            border: 2px solid rgba(34, 197, 94, 0.7);
+            margin: 0 auto 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #4ade80;
+            animation: pop 0.4s ease-out;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.6);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-actions {
+            margin-top: 1.1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .btn-outline {
+            padding: 0.6rem 0.8rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: transparent;
+            color: var(--text);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .btn-ghost {
+            padding: 0.5rem 0.8rem;
+            border-radius: 999px;
+            border: none;
+            background: transparent;
+            color: var(--text-soft);
+            font-size: 0.85rem;
+        }
+
+        /* DEBTORS REPORT (3.3) */
+
+        .table-wrapper {
+            width: 100%;
+            overflow: auto;
+            border-radius: 14px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        :root[data-theme="light"] .table-wrapper {
+            background: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.84rem;
+        }
+
+        thead {
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+        }
+
+        :root[data-theme="light"] thead {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        th,
+        td {
+            padding: 0.55rem 0.75rem;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            font-weight: 500;
+            color: var(--text-soft);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(2, 6, 23, 0.8);
+        }
+
+        :root[data-theme="light"] tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        :root[data-theme="light"] tbody tr:nth-child(odd) {
+            background: #ffffff;
+        }
+
+        tbody tr td.debt {
+            color: #fecaca;
+        }
+
+        .filter-row {
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-chip {
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            font-size: 0.78rem;
+            cursor: pointer;
+            color: var(--text-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        :root[data-theme="light"] .filter-chip {
+            background: #f3f4f6;
+        }
+
+        .filter-chip.active {
+            background: rgba(220, 38, 38, 0.14);
+            border-color: rgba(220, 38, 38, 0.8);
+            color: #fecaca;
+        }
+
+        /* ATTENDANCE (4.x) */
+
+        .meeting-list {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .meeting-column {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .meeting-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            background: rgba(37, 99, 235, 0.16);
+            color: #bfdbfe;
+        }
+
+        .meeting-pill {
+            padding: 0.45rem 0.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            margin-bottom: 0.4rem;
+            font-size: 0.82rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .meeting-pill span.date {
+            color: var(--text-soft);
+            font-size: 0.75rem;
+        }
+
+        .btn-create-meeting {
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            border: 1px dashed rgba(148, 163, 184, 0.8);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text-soft);
+            font-size: 0.82rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-top: 0.6rem;
+        }
+
+        :root[data-theme="light"] .btn-create-meeting {
+            background: #f9fafb;
+        }
+
+        .provost-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .live-clock {
+            font-size: 0.8rem;
+            color: var(--text-soft);
+        }
+
+        .search-large input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        :root[data-theme="light"] .search-large input {
+            background: #f9fafb;
+        }
+
+        .tap-list {
+            margin-top: 0.8rem;
+            max-height: 420px;
+            overflow: auto;
+        }
+
+        .tap-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) auto;
+            gap: 0.75rem;
+            align-items: center;
+            padding: 0.45rem 0.4rem;
+            border-bottom: 1px dashed rgba(30, 64, 175, 0.5);
+        }
+
+        .tap-name {
+            font-size: 0.85rem;
+        }
+
+        .toggle-traffic {
+            display: inline-flex;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-subtle);
+            overflow: hidden;
+            font-size: 0.75rem;
+        }
+
+        :root[data-theme="light"] .toggle-traffic {
+            background: #f3f4f6;
+        }
+
+        .toggle-traffic button {
+            padding: 0.2rem 0.55rem;
+            border-radius: 0;
+            background: transparent;
+            color: var(--text-soft);
+            min-width: 54px;
+        }
+
+        .toggle-traffic button.active.present {
+            background: var(--brand-accent-soft);
+            color: #bbf7d0;
+        }
+
+        .toggle-traffic button.active.late {
+            background: var(--warning-soft);
+            color: #facc15;
+        }
+
+        .toggle-traffic button.active.absent {
+            background: var(--danger-soft);
+            color: #fecaca;
+        }
+
+        .provost-footer {
+            margin-top: 0.8rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-close-register {
+            padding: 0.55rem 0.95rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #dc2626, #ea580c);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* MEMBERSHIP (5.x) */
+
+        .avatar-sm {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #2563eb, #22c55e);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.4rem;
+        }
+
+        .action-icons {
+            display: flex;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+            color: var(--text-soft);
+        }
+
+        .action-icon {
+            cursor: pointer;
+            padding: 0.15rem;
+            border-radius: 6px;
+            transition: background 0.12s ease, color 0.12s ease;
+        }
+
+        .action-icon:hover {
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+        }
+
+        :root[data-theme="light"] .action-icon:hover {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .btn-import {
+            padding: 0.45rem 0.9rem;
+            border-radius: 999px;
+            border: 1px dashed rgba(148, 163, 184, 0.9);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text-soft);
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        :root[data-theme="light"] .btn-import {
+            background: #f9fafb;
+        }
+
+        .status-chip {
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .status-chip.active {
+            background: var(--brand-accent-soft);
+            color: #bbf7d0;
+            border-color: rgba(34, 197, 94, 0.7);
+        }
+
+        .status-chip.travelled {
+            background: rgba(59, 130, 246, 0.12);
+            color: #bfdbfe;
+            border-color: rgba(59, 130, 246, 0.7);
+        }
+
+        .status-chip.deceased {
+            background: rgba(148, 163, 184, 0.2);
+            color: #e5e7eb;
+            border-color: rgba(148, 163, 184, 0.8);
+        }
+
+        /* Member Details Modal (5.2) */
+
+        .side-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.8);
+            display: none;
+            justify-content: flex-end;
+            z-index: 35;
+        }
+
+        .side-modal-backdrop.active {
+            display: flex;
+        }
+
+        .side-modal {
+            width: 360px;
+            max-width: 100%;
+            background: var(--bg-elevated);
+            border-left: 1px solid var(--border-subtle);
+            padding: 1.2rem 1rem 1.4rem;
+            box-shadow: -18px 0 40px rgba(0, 0, 0, 0.65);
+        }
+
+        .side-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .side-modal-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .side-modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-soft);
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .form-row {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-row-inline {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.6rem;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin: 0.4rem 0 0.6rem;
+        }
+
+        .toggle-switch {
+            width: 38px;
+            height: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            position: relative;
+            cursor: pointer;
+        }
+
+        :root[data-theme="light"] .toggle-switch {
+            background: #e5e7eb;
+        }
+
+        .toggle-knob {
+            width: 16px;
+            height: 16px;
+            background: #f9fafb;
+            border-radius: 999px;
+            position: absolute;
+            top: 1px;
+            left: 2px;
+            transition: transform 0.16s ease;
+        }
+
+        .toggle-switch.active {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.8);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(14px);
+        }
+
+        .btn-save-member {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* SETTINGS MODULE (6.x) */
+
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.7rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 900px) {
+            .month-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .month-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .month-card {
+            border-radius: 14px;
+            border: 1px solid var(--border-subtle);
+            padding: 0.6rem 0.7rem;
+            background: rgba(15, 23, 42, 0.9);
+            font-size: 0.8rem;
+        }
+
+        :root[data-theme="light"] .month-card {
+            background: #ffffff;
+        }
+
+        .month-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+        }
+
+        .month-name {
+            font-weight: 500;
+        }
+
+        .month-controls {
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .month-controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.25rem;
+        }
+
+        .month-controls-row span {
+            color: var(--text-soft);
+        }
+
+        .month-levy-input {
+            width: 100%;
+            padding: 0.35rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            font-size: 0.75rem;
+            outline: none;
+        }
+
+        :root[data-theme="light"] .month-levy-input {
+            background: #f9fafb;
+        }
+
+        .fine-rules {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.7rem;
+            margin-top: 0.7rem;
+        }
+
+        .fine-input input {
+            width: 100%;
+            padding: 0.4rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        :root[data-theme="light"] .fine-input input {
+            background: #f9fafb;
+        }
+
+        .campaign-list {
+            margin-top: 0.6rem;
+        }
+
+        .campaign-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.45rem 0.35rem;
+            border-bottom: 1px dashed rgba(30, 64, 175, 0.5);
+            font-size: 0.85rem;
+        }
+
+        .campaign-row:last-child {
+            border-bottom: none;
+        }
+
+        .campaign-target {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+        }
+
+        .btn-create-campaign {
+            margin-top: 0.7rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            border: 1px dashed rgba(148, 163, 184, 0.9);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text-soft);
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        :root[data-theme="light"] .btn-create-campaign {
+            background: #f9fafb;
+        }
+
+        /* MEMBER APP (Platform B – Mobile style) */
+
+        .member-app-wrapper {
+            max-width: 420px;
+            margin: 0 auto;
+            margin-top: 0.1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+            background: radial-gradient(circle at top, rgba(37, 99, 235, 0.18), var(--bg-elevated));
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 520px;
+        }
+
+        :root[data-theme="light"] .member-app-wrapper {
+            background: #ffffff;
+        }
+
+        .member-app-header {
+            padding: 0.8rem 0.9rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .member-app-header span {
+            font-weight: 500;
+        }
+
+        .member-app-body {
+            flex: 1;
+            padding: 0.9rem;
+            overflow: auto;
+        }
+
+        .member-app-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            margin-bottom: 0.7rem;
+            gap: 0.25rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 0.15rem;
+        }
+
+        :root[data-theme="light"] .member-app-tabs {
+            background: #e5e7eb;
+        }
+
+        .member-tab-btn {
+            border-radius: 999px;
+            padding: 0.25rem 0.35rem;
+            font-size: 0.75rem;
+            background: transparent;
+            color: var(--text-soft);
+        }
+
+        .member-tab-btn.active {
+            background: rgba(37, 99, 235, 0.24);
+            color: white;
+        }
+
+        .member-app-footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 0.6rem 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-soft);
+        }
+
+        .member-login {
+            padding: 1rem;
+        }
+
+        .member-login .form-input {
+            font-size: 0.9rem;
+        }
+
+        .member-card {
+            border-radius: 16px;
+            padding: 0.9rem;
+            background: radial-gradient(circle at top, #22c55e22, var(--bg-elevated));
+            border: 1px solid rgba(148, 163, 184, 0.55);
+            margin-bottom: 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        :root[data-theme="light"] .member-card {
+            background: #ecfdf5;
+        }
+
+        .member-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-card-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .qr-placeholder {
+            width: 72px;
+            height: 72px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-soft);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        :root[data-theme="light"] .qr-placeholder {
+            background: #f9fafb;
+        }
+
+        .balance-display {
+            margin-bottom: 0.6rem;
+        }
+
+        .balance-label {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+        }
+
+        .balance-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #4ade80;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #2563eb, #22c55e);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+
+        .timeline {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.8rem;
+        }
+
+        .timeline-item {
+            padding: 0.4rem 0.2rem;
+            border-bottom: 1px dashed rgba(30, 64, 175, 0.4);
+            display: flex;
+            justify-content: space-between;
+            gap: 0.6rem;
+            align-items: baseline;
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-type {
+            font-size: 0.7rem;
+            color: var(--text-soft);
+        }
+
+        .timeline-action {
+            font-size: 0.75rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .trust-code {
+            margin-top: 0.5rem;
+            padding: 0.6rem 0.7rem;
+            border-radius: 14px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            background: rgba(15, 23, 42, 0.9);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        :root[data-theme="light"] .trust-code {
+            background: #f9fafb;
+        }
+
+        .trust-code-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 0.26em;
+            margin-top: 0.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1.1 LOGIN GATE (Platform A – Admin Portal) -->
+    <div class="login-gate" id="loginGate">
+        <div class="login-left">
+            <div class="login-logo">
+                <span>ORG</span>
+            </div>
+            <div class="login-org-text">
+                Secure entry into your union’s financial, attendance, and membership engines.
+                <br /><br />
+                Brand logo and colors adapt to the organization detected from the email domain.
+            </div>
+        </div>
+        <div class="login-right">
+            <div class="login-form-card">
+                <div class="login-title" id="loginTitle">Sign in to Assembyl</div>
+                <div class="login-subtitle">Use your union email address. We’ll detect the organization automatically.
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="loginEmail">Email Address</label>
+                    <input class="form-input" type="email" id="loginEmail" placeholder="you@abiaunion.eu" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="loginPassword">Password</label>
+                    <input class="form-input" type="password" id="loginPassword" placeholder="••••••••" />
+                </div>
+
+                <div class="form-group">
+                    <button class="btn-primary" id="btnLogin">
+                        <span>Login</span> <span>→</span>
+                    </button>
+                </div>
+
+                <div class="form-group" style="display:flex; justify-content: space-between; align-items:center;">
+                    <span class="link-inline" id="forgotPasswordLink">Forgot Password?</span>
+                    <span class="small-label">Support via mail for MVP</span>
+                </div>
+            </div>
+            <div class="login-footer">
+                <span class="powered-watermark">Powered by Assembyl</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- APP SHELL (Admin Portal + Member App views) -->
+    <div class="app-shell" id="appShell">
+        <!-- Sidebar / Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-mark">AY</div>
+                <div class="sidebar-logo-text">
+                    <span id="sidebarOrgName">Abia Union</span>
+                    <span>Admin Portal</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section-title">Dashboard</div>
+            <div class="nav-group">
+                <!-- 2.1 Chairman’s Dashboard -->
+                <div class="nav-item active" data-screen-target="screen-dashboard">
+                    <span class="icon">📊</span>
+                    <span>Chairman’s Dashboard</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section-title">Finance Module</div>
+            <div class="nav-group">
+                <!-- 3.1 Smart Ledger -->
+                <div class="nav-item" data-screen-target="screen-ledger">
+                    <span class="icon">💰</span>
+                    <span>The Smart Ledger</span>
+                </div>
+                <!-- 3.3 Debtors Report -->
+                <div class="nav-item" data-screen-target="screen-debtors-report">
+                    <span class="icon">📉</span>
+                    <span>Debtors Report</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section-title">Attendance Module</div>
+            <div class="nav-group">
+                <!-- 4.1 Meeting Manager -->
+                <div class="nav-item" data-screen-target="screen-meeting-manager">
+                    <span class="icon">📆</span>
+                    <span>Meeting Manager</span>
+                </div>
+                <!-- 4.2 Provost Tapper -->
+                <div class="nav-item" data-screen-target="screen-provost-tapper">
+                    <span class="icon">✅</span>
+                    <span>The Provost Tapper</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section-title">Membership</div>
+            <div class="nav-group">
+                <!-- 5.1 Member Directory -->
+                <div class="nav-item" data-screen-target="screen-member-directory">
+                    <span class="icon">👥</span>
+                    <span>Member Directory</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section-title">Settings</div>
+            <div class="nav-group">
+                <!-- 6.1 Fiscal Calendar -->
+                <div class="nav-item" data-screen-target="screen-fiscal-calendar">
+                    <span class="icon">📅</span>
+                    <span>Fiscal Calendar & Config</span>
+                </div>
+                <!-- 6.2 Campaign Manager -->
+                <div class="nav-item" data-screen-target="screen-campaign-manager">
+                    <span class="icon">🎯</span>
+                    <span>Campaign Manager</span>
+                </div>
+            </div>
+
+            <div class="sidebar-flex-bottom">
+                <div>Signed in as</div>
+                <div class="badge-role">
+                    <span>👑</span> <span>Chairman / Fin Sec</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Area -->
+        <div class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-org" id="topbarOrgName">Abia Union, Netherlands</div>
+                    <div class="topbar-subtle">Phase 0.5 · MVP Control Room</div>
+                </div>
+                <div class="topbar-right">
+                    <div class="mode-toggle">
+                        <button class="active" id="btnModeAdmin">Admin Portal</button>
+                        <button id="btnModeMember">Member App</button>
+                    </div>
+
+                    <!-- Theme toggle -->
+                    <button id="themeToggle" class="btn-ghost"
+                        style="font-size:0.85rem; padding:0.35rem 0.7rem; border-radius:999px; border:1px solid var(--border-subtle); background:rgba(15,23,42,0.8);">
+                        🌙 Dark
+                    </button>
+
+                    <div class="user-pill">
+                        <div class="user-avatar">KC</div>
+                        <div>
+                            <div style="font-size:0.8rem;">Kingsley · Fin Sec</div>
+                            <div style="font-size:0.72rem; color:var(--text-soft);">Multi-role: Chairman, Secretary
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ADMIN PORTAL CONTENT -->
+            <main class="content" id="adminContent">
+                <!-- 2.1 Chairman’s Dashboard -->
+                <section class="screen active" id="screen-dashboard">
+                    <div class="screen-header">
+                        <div>
+                            <div class="screen-title">Chairman’s Dashboard</div>
+                            <div class="screen-subtitle">
+                                High-level health check of the union: cash, arrears, members, and last meeting.
+                            </div>
+                        </div>
+                        <div class="screen-header-right">
+                            <div class="pill-pill">
+                                <span class="pill pill-green">February Meeting Active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-4 kpi-row">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title"><span class="kpi-icon">💰</span>Cash in Hand (This Month)</div>
+                                <span class="small-tag">EUR</span>
+                            </div>
+                            <div class="card-value kpi-positive">€ 4,250</div>
+                            <div class="small-label">Includes dues, levies & donations</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title"><span class="kpi-icon">📉</span>Total Arrears</div>
+                                <span class="small-tag">Union-wide</span>
+                            </div>
+                            <div class="card-value kpi-negative">€ 18,430</div>
+                            <div class="small-label">Across 72 members</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title"><span class="kpi-icon">👥</span>Active Members</div>
+                                <span class="small-tag">Verified</span>
+                            </div>
+                            <div class="card-value">128</div>
+                            <div class="small-label">3 travelled · 2 deceased</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title"><span class="kpi-icon">📊</span>Last Meeting Attendance</div>
+                                <span class="small-tag">Jan General Meeting</span>
+                            </div>
+                            <div class="card-value">78%</div>
+                            <div class="small-label">Present: 100 · Late: 14 · Absent fined: 14</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <!-- Recent Activity Feed -->
+                        <div class="card recent-activity">
+                            <div class="card-header">
+                                <div class="card-title">Recent Activity</div>
+                                <span class="small-tag">Last 5 actions</span>
+                            </div>
+                            <ul class="list">
+                                <li class="list-item">
+                                    <span>Chinedu paid €50 (Monthly Dues)</span>
+                                    <span class="small-label">Just now</span>
+                                </li>
+                                <li class="list-item">
+                                    <span>February General Meeting created</span>
+                                    <span class="small-label">5 min ago</span>
+                                </li>
+                                <li class="list-item">
+                                    <span>Adaobi marked Present (Feb Mtg)</span>
+                                    <span class="small-label">12 min ago</span>
+                                </li>
+                                <li class="list-item">
+                                    <span>Fine: Absent auto-applied for 6 members</span>
+                                    <span class="small-label">Yesterday</span>
+                                </li>
+                                <li class="list-item">
+                                    <span>Building Fund campaign updated (50% reached)</span>
+                                    <span class="small-label">2 days ago</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Debtors Watchlist -->
+                        <div class="card debtors-watchlist">
+                            <div class="card-header">
+                                <div class="card-title">Debtors Watchlist</div>
+                                <span class="small-tag">Top 5 by amount</span>
+                            </div>
+                            <ul class="list">
+                                <li class="list-item">
+                                    <span>Chukwuemeka N. — <strong style="color:#fecaca;">€ 1,850</strong></span>
+                                    <span class="small-label">Last paid: Nov 2024</span>
+                                </li>
+                                <li class="list-item">
+                                    <span>Joy I. — <strong style="color:#fecaca;">€ 1,420</strong></span>
+                                    <span class="small-label">Last paid: Oct 2024</span>
+                                </li>
+                                <li class="list-item">
+                                    <span>Uchenna O. — <strong style="color:#fecaca;">€ 1,300</strong></span>
+                                    <span class="small-label">Last paid: Jul 2024</span>
+                                </li>
+                                <li class="list-item">
+                                    <span>Amaka K. — <strong style="color:#fecaca;">€ 1,120</strong></span>
+                                    <span class="small-label">Last paid: Aug 2024</span>
+                                </li>
+                                <li class="list-item">
+                                    <span>Obinna C. — <strong style="color:#fecaca;">€ 980</strong></span>
+                                    <span class="small-label">Last paid: Sep 2024</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3.1 The Smart Ledger (Finance) -->
+                <section class="screen" id="screen-ledger">
+                    <div class="screen-header">
+                        <div>
+                            <div class="screen-title">The Smart Ledger</div>
+                            <div class="screen-subtitle">
+                                Command center for recording dues, levies, donations, and fines.
+                            </div>
+                        </div>
+                        <div class="screen-header-right">
+                            <span class="pill">Cash Session: Feb General Meeting</span>
+                        </div>
+                    </div>
+
+                    <div class="layout-two-column">
+                        <!-- Left Sidebar: Member list -->
+                        <div class="card card-muted">
+                            <div class="member-search">
+                                <input class="form-input" type="text" placeholder="Search member by name or ID…" />
+                            </div>
+                            <div class="member-list" id="ledgerMemberList">
+                                <div class="member-row active" data-member="1">
+                                    <div style="display:flex; align-items:center;">
+                                        <div class="member-avatar-sm">CN</div>
+                                        <div>
+                                            <div style="font-size:0.85rem;">Chinedu N.</div>
+                                            <div class="small-label">ID: ABU-001</div>
+                                        </div>
+                                    </div>
+                                    <div class="member-row-balance negative">-€ 230</div>
+                                </div>
+                                <div class="member-row" data-member="2">
+                                    <div style="display:flex; align-items:center;">
+                                        <div class="member-avatar-sm">AI</div>
+                                        <div>
+                                            <div style="font-size:0.85rem;">Adaobi I.</div>
+                                            <div class="small-label">ID: ABU-012</div>
+                                        </div>
+                                    </div>
+                                    <div class="member-row-balance positive">+€ 40</div>
+                                </div>
+                                <div class="member-row" data-member="3">
+                                    <div style="display:flex; align-items:center;">
+                                        <div class="member-avatar-sm">UK</div>
+                                        <div>
+                                            <div style="font-size:0.85rem;">Uche K.</div>
+                                            <div class="small-label">ID: ABU-034</div>
+                                        </div>
+                                    </div>
+                                    <div class="member-row-balance negative">-€ 90</div>
+                                </div>
+                                <!-- more rows as needed -->
+                            </div>
+                        </div>
+
+                        <!-- Main Canvas: Transaction form -->
+                        <div class="card">
+                            <div class="ledger-member-context">
+                                <div class="member-avatar-sm">CN</div>
+                                <div class="ledger-member-meta">
+                                    <div>Chinedu N. · <span class="small-label">ABU-001</span></div>
+                                    <div class="ledger-debt">Total Debt: <span>€ 230</span></div>
+                                </div>
+                            </div>
+
+                            <div class="amount-input">
+                                <label class="form-label">Amount (€)</label>
+                                <input type="number" id="ledgerAmount" placeholder="50" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Category</label>
+                                <div class="pill-row" id="categoryRow">
+                                    <button class="pill-option active" data-category="dues">Monthly Dues</button>
+                                    <button class="pill-option" data-category="levy">Levy</button>
+                                    <button class="pill-option" data-category="donation">Donation</button>
+                                    <button class="pill-option" data-category="fine">Fine</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Payment Method</label>
+                                <div class="pill-row" id="methodRow">
+                                    <button class="pill-option active" data-method="cash">Cash</button>
+                                    <button class="pill-option" data-method="bank">Bank Transfer</button>
+                                    <button class="pill-option" data-method="tikkie">Tikkie / Payment Link</button>
+                                </div>
+                            </div>
+
+                            <!-- Project dropdown only when Donation selected -->
+                            <div class="form-group" id="projectDropdown" style="display:none;">
+                                <label class="form-label">Project / Campaign</label>
+                                <select class="form-input">
+                                    <option>Building Fund 2025</option>
+                                    <option>Welfare & Emergency Support</option>
+                                    <option>Education Support Scheme</option>
+                                </select>
+                            </div>
+
+                            <div class="ledger-actions">
+                                <button class="btn-secondary">Clear</button>
+                                <button class="btn-primary-wide" id="btnSaveReceipt">
+                                    <span>SAVE &amp; GENERATE RECEIPT</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3.3 Debtors Report -->
+                <section class="screen" id="screen-debtors-report">
+                    <div class="screen-header">
+                        <div>
+                            <div class="screen-title">Debtors Report</div>
+                            <div class="screen-subtitle">Enforcement list of members in arrears.</div>
+                        </div>
+                        <div class="screen-header-right">
+                            <button class="btn-secondary" id="btnExportPDF">Download PDF for Group Chat</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="filter-row">
+                            <span class="small-label">Filter:</span>
+                            <button class="filter-chip active" data-debt-filter="all">All</button>
+                            <button class="filter-chip" data-debt-filter="100">Owe &gt; €100</button>
+                            <button class="filter-chip" data-debt-filter="500">Owe &gt; €500</button>
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table id="debtorsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Last Payment</th>
+                                        <th>Total Debt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-debt="1850">
+                                        <td>Chukwuemeka N.</td>
+                                        <td>+31 6 1234 5671</td>
+                                        <td>Nov 2024</td>
+                                        <td class="debt">€ 1,850</td>
+                                    </tr>
+                                    <tr data-debt="1420">
+                                        <td>Joy I.</td>
+                                        <td>+31 6 1234 5672</td>
+                                        <td>Oct 2024</td>
+                                        <td class="debt">€ 1,420</td>
+                                    </tr>
+                                    <tr data-debt="1300">
+                                        <td>Uchenna O.</td>
+                                        <td>+31 6 1234 5673</td>
+                                        <td>Jul 2024</td>
+                                        <td class="debt">€ 1,300</td>
+                                    </tr>
+                                    <tr data-debt="1120">
+                                        <td>Amaka K.</td>
+                                        <td>+31 6 1234 5674</td>
+                                        <td>Aug 2024</td>
+                                        <td class="debt">€ 1,120</td>
+                                    </tr>
+                                    <tr data-debt="980">
+                                        <td>Obinna C.</td>
+                                        <td>+31 6 1234 5675</td>
+                                        <td>Sep 2024</td>
+                                        <td class="debt">€ 980</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4.1 Meeting Manager -->
+                <section class="screen" id="screen-meeting-manager">
+                    <div class="screen-header">
+                        <div>
+                            <div class="screen-title">Meeting Manager</div>
+                            <div class="screen-subtitle">
+                                Create and select meetings from the fiscal calendar.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="meeting-list">
+                            <div class="meeting-column">
+                                <div class="card-title">Upcoming Meetings</div>
+                                <div class="meeting-pill">
+                                    <div>
+                                        Feb General Meeting
+                                        <div class="small-label">Fiscal: Feb 2025 · 15:00–18:00</div>
+                                    </div>
+                                    <span class="meeting-badge">Active</span>
+                                </div>
+                                <div class="meeting-pill">
+                                    <div>
+                                        March Strategy Session
+                                        <div class="small-label">Fiscal: Mar 2025 · 16:00–19:00</div>
+                                    </div>
+                                    <span class="small-tag">Draft</span>
+                                </div>
+                                <button class="btn-create-meeting">
+                                    <span>＋</span><span>Create New Meeting</span>
+                                </button>
+                            </div>
+                            <div class="meeting-column">
+                                <div class="card-title">Past Meetings</div>
+                                <div class="meeting-pill">
+                                    <div>
+                                        January General Meeting
+                                        <div class="small-label">Attendance: 78%</div>
+                                    </div>
+                                    <span class="small-tag">Closed</span>
+                                </div>
+                                <div class="meeting-pill">
+                                    <div>
+                                        End of Year Party
+                                        <div class="small-label">Attendance: 92%</div>
+                                    </div>
+                                    <span class="small-tag">Closed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4.2 The Provost Tapper (Active Meeting) -->
+                <section class="screen" id="screen-provost-tapper">
+                    <div class="screen-header">
+                        <div>
+                            <div class="screen-title">The Provost Tapper</div>
+                            <div class="screen-subtitle">Fast check-in at the door for active meeting.</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="provost-header">
+                            <div>
+                                <div style="font-size:0.95rem; font-weight:500;">Feb General Meeting</div>
+                                <div class="small-label">Door-side register · Tap once per member</div>
+                            </div>
+                            <div class="live-clock" id="liveClock">Live: --:--</div>
+                        </div>
+
+                        <div class="search-large">
+                            <input type="text" placeholder="Search member by name or ID…" />
+                        </div>
+
+                        <div class="tap-list">
+                            <div class="tap-row">
+                                <div class="tap-name">
+                                    <strong>Chinedu N.</strong>
+                                    <div class="small-label">ABU-001</div>
+                                </div>
+                                <div class="toggle-traffic">
+                                    <button class="active present">Present</button>
+                                    <button>Late</button>
+                                    <button>Absent</button>
+                                </div>
+                            </div>
+                            <div class="tap-row">
+                                <div class="tap-name">
+                                    <strong>Adaobi I.</strong>
+                                    <div class="small-label">ABU-012</div>
+                                </div>
+                                <div class="toggle-traffic">
+                                    <button>Present</button>
+                                    <button class="active late">Late</button>
+                                    <button>Absent</button>
+                                </div>
+                            </div>
+                            <div class="tap-row">
+                                <div class="tap-name">
+                                    <strong>Uche K.</strong>
+                                    <div class="small-label">ABU-034</div>
+                                </div>
+                                <div class="toggle-traffic">
+                                    <button>Present</button>
+                                    <button>Late</button>
+                                    <button class="active absent">Absent</button>
+                                </div>
+                            </div>
+                            <!-- more rows... -->
+                        </div>
+
+                        <div class="provost-footer">
+                            <button class="btn-close-register">Close Register &amp; Apply Fines</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5.1 Member Directory -->
+                <section class="screen" id="screen-member-directory">
+                    <div class="screen-header">
+                        <div>
+                            <div class="screen-title">Member Directory</div>
+                            <div class="screen-subtitle">
+                                Source of truth for member data. Edit, deactivate, and import records.
+                            </div>
+                        </div>
+                        <div class="screen-header-right">
+                            <button class="btn-import">
+                                ⬆️ Upload Excel
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Photo</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="memberDirectoryTable">
+                                    <tr data-member-id="1">
+                                        <td><span class="avatar-sm">CN</span></td>
+                                        <td>Chinedu N.</td>
+                                        <td>+31 6 1234 5671</td>
+                                        <td>chinedu@abiaunion.eu</td>
+                                        <td><span class="status-chip active">Active</span></td>
+                                        <td>
+                                            <div class="action-icons">
+                                                <span class="action-icon" data-action="edit">✏️</span>
+                                                <span class="action-icon" data-action="deactivate">⏹</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-member-id="2">
+                                        <td><span class="avatar-sm">AI</span></td>
+                                        <td>Adaobi I.</td>
+                                        <td>+31 6 1234 5672</td>
+                                        <td>adaobi@abiaunion.eu</td>
+                                        <td><span class="status-chip travelled">Travelled</span></td>
+                                        <td>
+                                            <div class="action-icons">
+                                                <span class="action-icon" data-action="edit">✏️</span>
+                                                <span class="action-icon" data-action="deactivate">⏹</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-member-id="3">
+                                        <td><span class="avatar-sm">UK</span></td>
+                                        <td>Uche K.</td>
+                                        <td>+31 6 1234 5673</td>
+                                        <td>uche@abiaunion.eu</td>
+                                        <td><span class="status-chip deceased">Deceased</span></td>
+                                        <td>
+                                            <div class="action-icons">
+                                                <span class="action-icon" data-action="edit">✏️</span>
+                                                <span class="action-icon" data-action="deactivate">⏹</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- more rows... -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6.1 Fiscal Calendar & Config -->
+                <section class="screen" id="screen-fiscal-calendar">
+                    <div class="screen-header">
+                        <div>
+                            <div class="screen-title">Fiscal Calendar & Config</div>
+                            <div class="screen-subtitle">
+                                Define meetings, dues, levies and fine rules for the year.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="month-grid">
+                            <!-- 12 months - simple static labels -->
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Jan</div>
+                                    <span class="small-tag">Closed</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)"
+                                        value="New Year Welfare" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Feb</div>
+                                    <span class="small-tag" style="border-color:#22c55e; color:#bbf7d0;">Active</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)"
+                                        value="Building Fund" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Mar</div>
+                                    <span class="small-tag">Draft</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+
+                            <!-- Repeat pattern for remaining months as simple static placeholders -->
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Apr</div>
+                                    <span class="small-tag">Planned</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">May</div>
+                                    <span class="small-tag">Planned</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Jun</div>
+                                    <span class="small-tag">Planned</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Jul</div>
+                                    <span class="small-tag">Planned</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Aug</div>
+                                    <span class="small-tag">Planned</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Sep</div>
+                                    <span class="small-tag">Planned</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Oct</div>
+                                    <span class="small-tag">Planned</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Nov</div>
+                                    <span class="small-tag">Planned</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+
+                            <div class="month-card">
+                                <div class="month-header">
+                                    <div class="month-name">Dec</div>
+                                    <span class="small-tag">Planned</span>
+                                </div>
+                                <div class="month-controls">
+                                    <div class="month-controls-row">
+                                        <span>Meeting?</span>
+                                        <div class="toggle-switch">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="month-controls-row">
+                                        <span>Dues Payable?</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <input class="month-levy-input" placeholder="Levy Name (optional)" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fine-rules">
+                            <div class="fine-input">
+                                <label class="form-label">Lateness Fine (€)</label>
+                                <input type="number" value="10" />
+                            </div>
+                            <div class="fine-input">
+                                <label class="form-label">Absenteeism Fine (€)</label>
+                                <input type="number" value="20" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6.2 Campaign Manager -->
+                <section class="screen" id="screen-campaign-manager">
+                    <div class="screen-header">
+                        <div>
+                            <div class="screen-title">Campaign Manager</div>
+                            <div class="screen-subtitle">
+                                Configure Building Funds, Welfare and other campaigns.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Active Campaigns</div>
+                            <span class="small-tag">Phase 0.5</span>
+                        </div>
+                        <div class="campaign-list">
+                            <div class="campaign-row">
+                                <div>
+                                    <div><strong>Building Fund 2025</strong></div>
+                                    <div class="campaign-target">Target: € 30,000 · Current: € 15,000 (50%)</div>
+                                </div>
+                                <div class="status-chip active">Active</div>
+                            </div>
+                            <div class="campaign-row">
+                                <div>
+                                    <div><strong>Welfare & Emergency Support</strong></div>
+                                    <div class="campaign-target">Target: € 5,000 · Current: € 2,150 (43%)</div>
+                                </div>
+                                <div class="status-chip active">Active</div>
+                            </div>
+                        </div>
+
+                        <button class="btn-create-campaign">
+                            <span>＋</span> <span>Create Campaign (Title · Target · Deadline)</span>
+                        </button>
+                    </div>
+                </section>
+            </main>
+
+            <!-- MEMBER APP VIEW (Platform B) -->
+            <main class="content" id="memberContent" style="display:none;">
+                <!-- 1.1 Mobile Login + Tabs 2.1 / 3.1 / 4.1 -->
+                <section class="screen active" id="screen-member-app">
+                    <div class="screen-header">
+                        <div>
+                            <div class="screen-title">Member App Preview</div>
+                            <div class="screen-subtitle">
+                                Mobile view: Digital ID, Wallet, History and Profile for general members.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="member-app-wrapper">
+                        <div class="member-app-header">
+                            <span>Abia Union · Member</span>
+                            <span style="font-size:0.75rem; color:var(--text-soft);">Phase 1 (Preview)</span>
+                        </div>
+
+                        <div class="member-app-body">
+                            <!-- Mobile Login (simplified MVP: phone + password) -->
+                            <div class="member-login" id="memberLoginSection">
+                                <div class="card-title">Sign in</div>
+                                <div class="screen-subtitle" style="margin-bottom:0.7rem;">
+                                    Phone number or member ID. OTP can replace password later.
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input class="form-input" placeholder="+31 6 1234 5678" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Password (MVP)</label>
+                                    <input class="form-input" type="password" placeholder="••••••••" />
+                                </div>
+                                <button class="btn-primary" id="btnMemberLogin"
+                                    style="width:100%; margin-bottom:0.75rem;">
+                                    Sign in
+                                </button>
+                                <div class="small-label">On success: load theme & personalized data.</div>
+                            </div>
+
+                            <!-- Wallet / History / Profile tabs -->
+                            <div id="memberTabsSection" style="display:none;">
+                                <div class="member-app-tabs">
+                                    <button class="member-tab-btn active" data-member-tab="wallet">Wallet</button>
+                                    <button class="member-tab-btn" data-member-tab="history">History</button>
+                                    <button class="member-tab-btn" data-member-tab="profile">Profile</button>
+                                </div>
+
+                                <!-- 2.1 Digital ID & Balance -->
+                                <div id="memberTabWallet">
+                                    <div class="member-card">
+                                        <div class="member-card-header">
+                                            <div>
+                                                <div class="small-label">Membership Card</div>
+                                                <div class="member-card-name">Chinedu N. · ABU-001</div>
+                                                <div class="small-label">Status: Active</div>
+                                            </div>
+                                            <div class="qr-placeholder">
+                                                QR
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="balance-display">
+                                            <div class="balance-label">Current Standing</div>
+                                            <div class="balance-value">+€ 40</div>
+                                            <div class="small-label">Red if debtor · Green if up to date.</div>
+                                        </div>
+                                        <button class="btn-pay">Pay Now (Stripe / Mollie)</button>
+                                        <div class="small-label">Recent Transactions</div>
+                                        <ul class="timeline">
+                                            <li class="timeline-item">
+                                                <span>Paid €50 (Feb 4 · Monthly Dues)</span>
+                                                <span class="timeline-type">Cash</span>
+                                            </li>
+                                            <li class="timeline-item">
+                                                <span>Fine: Late (Jan Meeting) -€5</span>
+                                                <span class="timeline-type">Auto</span>
+                                            </li>
+                                            <li class="timeline-item">
+                                                <span>Paid €100 (Building Fund)</span>
+                                                <span class="timeline-type">Bank</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- 3.1 Activity Log -->
+                                <div id="memberTabHistory" style="display:none;">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="card-title">Activity Log</div>
+                                            <span class="small-tag">Payments & Attendance</span>
+                                        </div>
+                                        <ul class="timeline">
+                                            <li class="timeline-item">
+                                                <span>Paid €50 (Feb 4 · Monthly Dues)</span>
+                                                <span class="timeline-action">PDF</span>
+                                            </li>
+                                            <li class="timeline-item">
+                                                <span>Marked Present (Feb General Meeting)</span>
+                                                <span class="timeline-type">Attendance</span>
+                                            </li>
+                                            <li class="timeline-item">
+                                                <span>Fine: Absent (Jan Meeting) -€10</span>
+                                                <span class="timeline-action">PDF</span>
+                                            </li>
+                                            <li class="timeline-item">
+                                                <span>Paid €100 (Building Fund)</span>
+                                                <span class="timeline-action">PDF</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- 4.1 My Account -->
+                                <div id="memberTabProfile" style="display:none;">
+                                    <div class="card">
+                                        <div class="card-title">My Account</div>
+                                        <div class="form-group">
+                                            <label class="form-label">Phone</label>
+                                            <input class="form-input" value="+31 6 1234 5671" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Address</label>
+                                            <input class="form-input" value="Amsterdam, Netherlands" />
+                                        </div>
+
+                                        <button class="btn-primary" style="width:100%; margin-bottom:0.7rem;">
+                                            Save Changes
+                                        </button>
+
+                                        <div class="small-label">Verification</div>
+                                        <button class="btn-outline" id="btnGenerateTrustCode"
+                                            style="width:100%; margin-top:0.35rem;">
+                                            Generate TrustLink Code
+                                        </button>
+
+                                        <div class="trust-code" id="trustCodeBox" style="display:none;">
+                                            <div class="small-label">TrustLink Code (Valid for 24h)</div>
+                                            <div class="trust-code-value" id="trustCodeValue">123 456</div>
+                                        </div>
+
+                                        <div
+                                            style="margin-top:0.8rem; border-top:1px dashed rgba(30,64,175,0.5); padding-top:0.6rem;">
+                                            <div class="small-label">Notifications</div>
+                                            <div class="toggle-row">
+                                                <span>WhatsApp reminders</span>
+                                                <div class="toggle-switch active">
+                                                    <div class="toggle-knob"></div>
+                                                </div>
+                                            </div>
+                                            <div class="toggle-row">
+                                                <span>Email statements</span>
+                                                <div class="toggle-switch">
+                                                    <div class="toggle-knob"></div>
+                                                </div>
+                                            </div>
+                                            <button class="btn-ghost" style="margin-top:0.3rem;">Logout</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="member-app-footer">
+                            <span>v0.5 · MVP Preview</span>
+                            <span>Balances sync from Admin Ledger</span>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- 3.2 Receipt Success Modal -->
+    <div class="modal-backdrop" id="receiptModal">
+        <div class="modal">
+            <div class="checkmark-circle">✓</div>
+            <div style="font-size:1rem; font-weight:600; margin-bottom:0.4rem;">
+                Payment recorded
+            </div>
+            <div style="font-size:0.9rem; color:var(--text-soft);" id="receiptMessage">
+                Payment of €50 recorded for Chinedu N.
+            </div>
+            <div class="modal-actions">
+                <button class="btn-outline">
+                    ⬇️ Download PDF Receipt
+                </button>
+                <button class="btn-outline">
+                    💬 Share via WhatsApp
+                </button>
+                <button class="btn-ghost" id="btnReceiptClose">
+                    Close &amp; Next
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5.2 Member Details / Edit Profile (Side Modal) -->
+    <div class="side-modal-backdrop" id="memberEditModal">
+        <div class="side-modal">
+            <div class="side-modal-header">
+                <div class="side-modal-title">Member Details</div>
+                <button class="side-modal-close" id="btnCloseMemberModal">✕</button>
+            </div>
+
+            <div class="form-row form-row-inline">
+                <div>
+                    <label class="form-label">First Name</label>
+                    <input class="form-input" id="editFirstName" />
+                </div>
+                <div>
+                    <label class="form-label">Last Name</label>
+                    <input class="form-input" id="editLastName" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label class="form-label">Phone</label>
+                <input class="form-input" id="editPhone" />
+            </div>
+
+            <div class="form-row">
+                <label class="form-label">Address</label>
+                <input class="form-input" id="editAddress" />
+            </div>
+
+            <div class="form-row">
+                <label class="form-label">Next of Kin</label>
+                <input class="form-input" id="editNextOfKin" />
+            </div>
+
+            <div class="toggle-row">
+                <span>Status: <strong id="editStatusLabel">Active</strong></span>
+                <div class="toggle-switch active" id="editStatusToggle">
+                    <div class="toggle-knob"></div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label class="form-label">Role</label>
+                <select class="form-input" id="editRole">
+                    <option>Member</option>
+                    <option>Chairman</option>
+                    <option>Financial Secretary</option>
+                    <option>Provost</option>
+                    <option>Secretary</option>
+                    <option>Exco Position (Other)</option>
+                </select>
+            </div>
+
+            <button class="btn-save-member">Save Member</button>
+        </div>
+    </div>
+
+    <script>
+        // LOGIN FLOW
+        const loginGate = document.getElementById('loginGate');
+        const appShell = document.getElementById('appShell');
+        const btnLogin = document.getElementById('btnLogin');
+        const loginEmail = document.getElementById('loginEmail');
+        const loginTitle = document.getElementById('loginTitle');
+        const sidebarOrgName = document.getElementById('sidebarOrgName');
+        const topbarOrgName = document.getElementById('topbarOrgName');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+
+        btnLogin.addEventListener('click', () => {
+            const email = loginEmail.value.trim();
+            let orgName = 'Assembyl';
+
+            if (email.includes('@abia')) {
+                orgName = 'Abia Union Netherlands';
+            } else if (email.includes('@anambra')) {
+                orgName = 'Anambra Union';
+            }
+
+            loginTitle.textContent = `Sign in to ${orgName}`;
+            sidebarOrgName.textContent = orgName.split(' ')[0] + ' Union';
+            topbarOrgName.textContent = orgName;
+            loginGate.style.display = 'none';
+            appShell.classList.add('active');
+        });
+
+        forgotPasswordLink.addEventListener('click', () => {
+            window.location.href = 'mailto:support@assembyl.app?subject=Password%20Reset%20Request';
+        });
+
+        // NAVIGATION between Admin screens
+        const navItems = document.querySelectorAll('.nav-item[data-screen-target]');
+        const screens = document.querySelectorAll('.screen');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetId = item.getAttribute('data-screen-target');
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                screens.forEach(s => {
+                    if (s.id === targetId) {
+                        s.classList.add('active');
+                    } else if (!s.closest('#memberContent')) {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Admin vs Member App mode toggle
+        const btnModeAdmin = document.getElementById('btnModeAdmin');
+        const btnModeMember = document.getElementById('btnModeMember');
+        const adminContent = document.getElementById('adminContent');
+        const memberContent = document.getElementById('memberContent');
+
+        btnModeAdmin.addEventListener('click', () => {
+            btnModeAdmin.classList.add('active');
+            btnModeMember.classList.remove('active');
+            adminContent.style.display = 'flex';
+            memberContent.style.display = 'none';
+        });
+
+        btnModeMember.addEventListener('click', () => {
+            btnModeMember.classList.add('active');
+            btnModeAdmin.classList.remove('active');
+            adminContent.style.display = 'none';
+            memberContent.style.display = 'flex';
+        });
+
+        // CATEGORY & METHOD PILL logic (show project dropdown when Donation)
+        const categoryRow = document.getElementById('categoryRow');
+        const projectDropdown = document.getElementById('projectDropdown');
+        if (categoryRow) {
+            categoryRow.addEventListener('click', (e) => {
+                if (e.target.matches('.pill-option')) {
+                    categoryRow.querySelectorAll('.pill-option').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const cat = e.target.getAttribute('data-category');
+                    projectDropdown.style.display = cat === 'donation' ? 'block' : 'none';
+                }
+            });
+        }
+
+        const methodRow = document.getElementById('methodRow');
+        if (methodRow) {
+            methodRow.addEventListener('click', (e) => {
+                if (e.target.matches('.pill-option')) {
+                    methodRow.querySelectorAll('.pill-option').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                }
+            });
+        }
+
+        // 3.2 Receipt Success Modal
+        const receiptModal = document.getElementById('receiptModal');
+        const btnSaveReceipt = document.getElementById('btnSaveReceipt');
+        const btnReceiptClose = document.getElementById('btnReceiptClose');
+        const receiptMessage = document.getElementById('receiptMessage');
+        const ledgerAmount = document.getElementById('ledgerAmount');
+
+        btnSaveReceipt.addEventListener('click', () => {
+            const amount = ledgerAmount.value || '50';
+            receiptMessage.textContent = `Payment of €${amount} recorded for Chinedu N.`;
+            receiptModal.classList.add('active');
+        });
+
+        btnReceiptClose.addEventListener('click', () => {
+            receiptModal.classList.remove('active');
+            ledgerAmount.value = '';
+        });
+
+        receiptModal.addEventListener('click', (e) => {
+            if (e.target === receiptModal) {
+                receiptModal.classList.remove('active');
+            }
+        });
+
+        // 3.3 Debtors Report filtering
+        const debtFilterChips = document.querySelectorAll('.filter-chip');
+        const debtRows = document.querySelectorAll('#debtorsTable tbody tr');
+
+        debtFilterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const filter = chip.getAttribute('data-debt-filter');
+                debtFilterChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                debtRows.forEach(row => {
+                    const amount = parseFloat(row.getAttribute('data-debt') || '0');
+                    let show = true;
+                    if (filter === '100') show = amount > 100;
+                    if (filter === '500') show = amount > 500;
+                    row.style.display = show ? '' : 'none';
+                });
+            });
+        });
+
+        // 4.2 Live clock for Provost Tapper
+        const liveClock = document.getElementById('liveClock');
+        function updateClock() {
+            const now = new Date();
+            liveClock.textContent = 'Live: ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        setInterval(updateClock, 30000);
+        updateClock();
+
+        // 4.2 toggle traffic buttons
+        document.querySelectorAll('.toggle-traffic').forEach(group => {
+            group.addEventListener('click', (e) => {
+                if (e.target.tagName.toLowerCase() === 'button') {
+                    group.querySelectorAll('button').forEach(btn => {
+                        btn.classList.remove('active', 'present', 'late', 'absent');
+                    });
+                    const btn = e.target;
+                    btn.classList.add('active');
+                    const label = btn.textContent.trim().toLowerCase();
+                    if (label === 'present') btn.classList.add('present');
+                    if (label === 'late') btn.classList.add('late');
+                    if (label === 'absent') btn.classList.add('absent');
+                }
+            });
+        });
+
+        // 5.2 Member Details modal
+        const memberDirectoryTable = document.getElementById('memberDirectoryTable');
+        const memberEditModal = document.getElementById('memberEditModal');
+        const btnCloseMemberModal = document.getElementById('btnCloseMemberModal');
+        const editFirstName = document.getElementById('editFirstName');
+        const editLastName = document.getElementById('editLastName');
+        const editPhone = document.getElementById('editPhone');
+        const editAddress = document.getElementById('editAddress');
+        const editNextOfKin = document.getElementById('editNextOfKin');
+        const editStatusToggle = document.getElementById('editStatusToggle');
+        const editStatusLabel = document.getElementById('editStatusLabel');
+
+        if (memberDirectoryTable) {
+            memberDirectoryTable.addEventListener('click', (e) => {
+                const action = e.target.getAttribute('data-action');
+                if (!action) return;
+                const row = e.target.closest('tr');
+                const name = row.children[1].textContent.trim();
+                const phone = row.children[2].textContent.trim();
+                const [firstName, ...rest] = name.split(' ');
+                const lastName = rest.join(' ') || '';
+                editFirstName.value = firstName;
+                editLastName.value = lastName;
+                editPhone.value = phone;
+                editAddress.value = 'Amsterdam, Netherlands';
+                editNextOfKin.value = '';
+                editStatusToggle.classList.add('active');
+                editStatusLabel.textContent = 'Active';
+                memberEditModal.classList.add('active');
+            });
+        }
+
+        btnCloseMemberModal.addEventListener('click', () => {
+            memberEditModal.classList.remove('active');
+        });
+
+        memberEditModal.addEventListener('click', (e) => {
+            if (e.target === memberEditModal) {
+                memberEditModal.classList.remove('active');
+            }
+        });
+
+        editStatusToggle.addEventListener('click', () => {
+            editStatusToggle.classList.toggle('active');
+            editStatusLabel.textContent = editStatusToggle.classList.contains('active') ? 'Active' : 'Inactive';
+        });
+
+        // MEMBER APP interactions
+        const btnMemberLogin = document.getElementById('btnMemberLogin');
+        const memberLoginSection = document.getElementById('memberLoginSection');
+        const memberTabsSection = document.getElementById('memberTabsSection');
+        const memberTabButtons = document.querySelectorAll('.member-tab-btn');
+        const memberTabWallet = document.getElementById('memberTabWallet');
+        const memberTabHistory = document.getElementById('memberTabHistory');
+        const memberTabProfile = document.getElementById('memberTabProfile');
+        const btnGenerateTrustCode = document.getElementById('btnGenerateTrustCode');
+        const trustCodeBox = document.getElementById('trustCodeBox');
+        const trustCodeValue = document.getElementById('trustCodeValue');
+
+        btnMemberLogin.addEventListener('click', () => {
+            memberLoginSection.style.display = 'none';
+            memberTabsSection.style.display = 'block';
+        });
+
+        memberTabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                memberTabButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const tab = btn.getAttribute('data-member-tab');
+                memberTabWallet.style.display = tab === 'wallet' ? 'block' : 'none';
+                memberTabHistory.style.display = tab === 'history' ? 'block' : 'none';
+                memberTabProfile.style.display = tab === 'profile' ? 'block' : 'none';
+            });
+        });
+
+        btnGenerateTrustCode.addEventListener('click', () => {
+            const code = Math.floor(100000 + Math.random() * 900000).toString();
+            trustCodeValue.textContent = code.slice(0, 3) + ' ' + code.slice(3);
+            trustCodeBox.style.display = 'block';
+        });
+
+        // THEME TOGGLE (dark / light)
+        const themeToggle = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                root.dataset.theme = 'light';
+                if (themeToggle) themeToggle.textContent = '☀️ Light';
+            } else {
+                root.dataset.theme = 'dark';
+                if (themeToggle) themeToggle.textContent = '🌙 Dark';
+            }
+            localStorage.setItem('assembyl-theme', theme);
+        }
+
+        // initial theme: from localStorage or prefers-color-scheme
+        (function initTheme() {
+            const saved = localStorage.getItem('assembyl-theme');
+            if (saved === 'light' || saved === 'dark') {
+                applyTheme(saved);
+            } else {
+                const prefersLight = window.matchMedia &&
+                    window.matchMedia('(prefers-color-scheme: light)').matches;
+                applyTheme(prefersLight ? 'light' : 'dark');
+            }
+        })();
+
+        // click handler
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const current = root.dataset.theme === 'light' ? 'light' : 'dark';
+                const next = current === 'light' ? 'dark' : 'light';
+                applyTheme(next);
+            });
+        }
+    </script>
+</body>
+
+</html>
