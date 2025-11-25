@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Role-specific workspace for Assembyl executives with curated tasks and priorities." />
+    <title>Assembyl | Role Workspace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <div class="layout" id="rolePortal">
+        <aside>
+            <div class="brand">
+                <div class="logo">AN</div>
+                <div class="meta">
+                    <span class="label">Union</span>
+                    <span class="org-name" data-org="sidebar">Assembyl</span>
+                </div>
+            </div>
+            <nav>
+                <div class="nav-item active"><i class="ph ph-layout"></i> Role workspace</div>
+                <div class="nav-item"><i class="ph ph-check"></i> Actions</div>
+                <div class="nav-item"><i class="ph ph-files"></i> Documents</div>
+                <div class="nav-item"><i class="ph ph-users"></i> Members</div>
+            </nav>
+            <div class="sidebar-footer">
+                <strong>Guidelines</strong>
+                <div>Role-tailored tasks and priorities</div>
+                <div>Org name follows your login</div>
+            </div>
+        </aside>
+        <main>
+            <header>
+                <div class="topbar">
+                    <div class="top-meta">
+                        <div>
+                            <div class="chip"><i class="ph ph-buildings"></i><span data-org="topbar">Assembyl</span></div>
+                            <div class="meta-muted">Executive workspace</div>
+                        </div>
+                    </div>
+                    <div class="top-actions">
+                        <div class="chip" id="roleBadge">Workspace</div>
+                        <button class="toggle" id="themeToggle" aria-label="Toggle theme">
+                            <span id="themeIcon">🌙</span>
+                            <span><strong>Dark</strong> mode</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <section class="card hero">
+                    <div class="hero-text">
+                        <div class="pill">Signed in</div>
+                        <h1 id="roleTitle">Workspace</h1>
+                        <p id="roleSummary" class="meta-muted">Personalized tasks and priorities for your executive role.</p>
+                        <div class="hero-actions">
+                            <a class="btn btn-primary" href="index.html">Switch account</a>
+                            <a class="btn" href="index.html">Back to portal preview</a>
+                        </div>
+                    </div>
+                    <div class="hero-card">
+                        <div class="pill" style="width:max-content;">Today</div>
+                        <h3>Quick wins</h3>
+                        <div class="list" id="roleActions"></div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Priorities & Spotlight</h2>
+                            <p class="meta-muted">Curated focus areas for this role with recent signals.</p>
+                        </div>
+                    </div>
+                    <div class="workspace-grid">
+                        <div class="card">
+                            <h3>Priorities</h3>
+                            <ul class="simple-list" data-role-list="priorities"></ul>
+                        </div>
+                        <div class="card">
+                            <h3>Spotlight</h3>
+                            <ul class="simple-list" data-role-list="spotlight"></ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="assets/app.js"></script>
+</body>
+</html>

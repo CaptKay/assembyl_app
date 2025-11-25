@@ -75,55 +75,6 @@
             border: none;
         }
 
-        /* Comparison dock for jumping between prototypes */
-        .compare-dock {
-            position: fixed;
-            top: 14px;
-            right: 14px;
-            z-index: 60;
-            width: 230px;
-            padding: 10px 12px;
-            border-radius: 14px;
-            border: 1px solid var(--border-subtle);
-            background: var(--bg-elevated);
-            box-shadow: var(--shadow-soft);
-            font-size: 13px;
-            display: grid;
-            gap: 6px;
-        }
-
-        .compare-dock h4 {
-            margin: 0;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .compare-actions {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
-        }
-
-        .compare-actions a {
-            display: inline-block;
-            padding: 8px 10px;
-            border-radius: 10px;
-            border: 1px solid var(--border-subtle);
-            background: rgba(15, 23, 42, 0.8);
-            color: var(--text);
-            text-align: center;
-            font-weight: 600;
-        }
-
-        :root[data-theme="light"] .compare-actions a {
-            background: #f9fafb;
-        }
-
-        .compare-dock small {
-            color: var(--text-soft);
-            line-height: 1.4;
-        }
-
         /* LOGIN GATE */
 
         .login-gate {
@@ -1783,15 +1734,6 @@
 </head>
 
 <body>
-    <div class="compare-dock">
-        <h4>Prototype quick switch</h4>
-        <div class="compare-actions">
-            <a href="index.html" aria-label="Open combined role workspace">index.html</a>
-            <a href="index3.html" aria-label="Open MVP prototype">index3.html</a>
-        </div>
-        <small>Jump between the combined role workspace and the MVP-style mobile preview to compare flows.</small>
-    </div>
-
     <!-- 1.1 LOGIN GATE (Platform A – Admin Portal) -->
     <div class="login-gate" id="loginGate">
         <div class="login-left">
