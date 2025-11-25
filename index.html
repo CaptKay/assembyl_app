@@ -11,17 +11,6 @@
 
 </head>
 <body>
-    <div class="compare-dock">
-        <h4>Compare prototypes</h4>
-        <div class="compare-actions">
-            <a href="index.html" aria-label="Open Admin & member workspace">index.html</a>
-            <a href="index3.html" aria-label="Open MVP prototype">index3.html</a>
-        </div>
-        <small>
-            Use these links to jump between the richer role workspaces (index.html) and the mobile-friendly MVP mock
-            (index3.html) without losing your place.
-        </small>
-    </div>
     <div class="layout" id="app">
         <aside>
             <div class="brand">
@@ -94,6 +83,15 @@
                             <div class="field">
                                 <label>Password</label>
                                 <input type="password" placeholder="••••••••" required />
+                            </div>
+                            <div class="field">
+                                <label>Role</label>
+                                <select id="roleSelect" required>
+                                    <option value="chairman">Chairman</option>
+                                    <option value="financial">Financial Secretary</option>
+                                    <option value="provost">Provost</option>
+                                    <option value="secretary">Secretary</option>
+                                </select>
                             </div>
                             <div class="field">
                                 <button type="submit" class="btn btn-primary">Login</button>

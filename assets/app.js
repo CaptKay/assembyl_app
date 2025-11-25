@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const storedTheme = localStorage.getItem('assembyl-theme');
+  const storedOrg = localStorage.getItem('assembyl-org');
+  const storedRole = localStorage.getItem('assembyl-role');
   const body = document.body;
   const themeToggle = document.getElementById('themeToggle');
   const themeIcon = document.getElementById('themeIcon');
@@ -8,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   const emailInput = document.getElementById('emailInput');
   const loginTitle = document.getElementById('loginTitle');
+  const roleSelect = document.getElementById('roleSelect');
   const phoneBody = document.getElementById('phoneBody');
   const tabs = document.querySelectorAll('.tab');
   const roleButtons = document.querySelectorAll('.role-btn');
@@ -28,18 +31,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   setTheme(storedTheme || (prefersDark ? 'dark' : 'light'));
 
-  themeToggle.addEventListener('click', () => {
-    const current = body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-    setTheme(current === 'dark' ? 'light' : 'dark');
-  });
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const current = body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+  }
 
   function setRole(role) {
     roleButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.role === role));
     rolePanels.forEach((panel) => panel.classList.toggle('active', panel.dataset.panel === role));
   }
 
-  roleButtons.forEach((btn) => btn.addEventListener('click', () => setRole(btn.dataset.role)));
-  setRole('chairman');
+  if (roleButtons.length && rolePanels.length) {
+    roleButtons.forEach((btn) => btn.addEventListener('click', () => setRole(btn.dataset.role)));
+    setRole('chairman');
+  }
 
   function deriveOrgFromEmail(email) {
     const domain = (email.split('@')[1] || '').split('.')[0];
@@ -53,17 +60,34 @@ document.addEventListener('DOMContentLoaded', () => {
     return mapping[domain.toLowerCase()] || `${domain.charAt(0).toUpperCase()}${domain.slice(1)} Union`;
   }
 
-  loginForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const org = deriveOrgFromEmail(emailInput.value.trim());
-    updateOrgLabels(org);
-  });
-
   function updateOrgLabels(org) {
     modeLabels.forEach((el) => {
       el.textContent = org;
     });
-    loginTitle.textContent = `Sign in to ${org}`;
+    if (loginTitle) {
+      loginTitle.textContent = `Sign in to ${org}`;
+    }
+  }
+
+  if (storedOrg) {
+    updateOrgLabels(storedOrg);
+  }
+
+  if (roleSelect && storedRole) {
+    roleSelect.value = storedRole;
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const org = deriveOrgFromEmail(emailInput.value.trim());
+      const role = roleSelect ? roleSelect.value : 'chairman';
+      localStorage.setItem('assembyl-org', org);
+      localStorage.setItem('assembyl-role', role);
+      updateOrgLabels(org);
+      const query = `role=${encodeURIComponent(role)}&org=${encodeURIComponent(org)}`;
+      window.location.href = `role-portal.html?${query}`;
+    });
   }
 
   const collectionsData = [
@@ -74,27 +98,29 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   const chartContainer = document.getElementById('collectionsChart');
-  const maxValue = Math.max(...collectionsData.flatMap((data) => [data.collections, data.arrears]));
+  if (chartContainer) {
+    const maxValue = Math.max(...collectionsData.flatMap((data) => [data.collections, data.arrears]));
 
-  collectionsData.forEach((item) => {
-    const group = document.createElement('div');
-    group.className = 'bar-group';
+    collectionsData.forEach((item) => {
+      const group = document.createElement('div');
+      group.className = 'bar-group';
 
-    const collectionsBar = document.createElement('div');
-    collectionsBar.className = 'bar collections';
-    collectionsBar.style.height = `${(item.collections / maxValue) * 180 + 30}px`;
+      const collectionsBar = document.createElement('div');
+      collectionsBar.className = 'bar collections';
+      collectionsBar.style.height = `${(item.collections / maxValue) * 180 + 30}px`;
 
-    const arrearsBar = document.createElement('div');
-    arrearsBar.className = 'bar arrears';
-    arrearsBar.style.height = `${(item.arrears / maxValue) * 180 + 30}px`;
+      const arrearsBar = document.createElement('div');
+      arrearsBar.className = 'bar arrears';
+      arrearsBar.style.height = `${(item.arrears / maxValue) * 180 + 30}px`;
 
-    const label = document.createElement('div');
-    label.style.fontWeight = '700';
-    label.textContent = item.month;
+      const label = document.createElement('div');
+      label.style.fontWeight = '700';
+      label.textContent = item.month;
 
-    group.append(collectionsBar, arrearsBar, label);
-    chartContainer.appendChild(group);
-  });
+      group.append(collectionsBar, arrearsBar, label);
+      chartContainer.appendChild(group);
+    });
+  }
 
   const attendanceData = [
     { label: 'Nov GM', percent: 72 },
@@ -104,26 +130,28 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   const attendanceList = document.getElementById('attendanceList');
-  attendanceData.forEach((row) => {
-    const item = document.createElement('div');
-    item.className = 'attendance-row';
+  if (attendanceList) {
+    attendanceData.forEach((row) => {
+      const item = document.createElement('div');
+      item.className = 'attendance-row';
 
-    const label = document.createElement('strong');
-    label.textContent = row.label;
+      const label = document.createElement('strong');
+      label.textContent = row.label;
 
-    const bar = document.createElement('div');
-    bar.className = 'attendance-bar';
-    const fill = document.createElement('span');
-    fill.style.width = `${row.percent}%`;
-    bar.appendChild(fill);
+      const bar = document.createElement('div');
+      bar.className = 'attendance-bar';
+      const fill = document.createElement('span');
+      fill.style.width = `${row.percent}%`;
+      bar.appendChild(fill);
 
-    const value = document.createElement('div');
-    value.textContent = `${row.percent}%`;
-    value.style.fontWeight = '700';
+      const value = document.createElement('div');
+      value.textContent = `${row.percent}%`;
+      value.style.fontWeight = '700';
 
-    item.append(label, bar, value);
-    attendanceList.appendChild(item);
-  });
+      item.append(label, bar, value);
+      attendanceList.appendChild(item);
+    });
+  }
 
   const phoneScreens = {
     wallet: `
@@ -194,8 +222,10 @@ document.addEventListener('DOMContentLoaded', () => {
     tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === name));
   }
 
-  tabs.forEach((tab) => tab.addEventListener('click', () => renderTab(tab.dataset.tab)));
-  renderTab('wallet');
+  if (phoneBody && tabs.length) {
+    tabs.forEach((tab) => tab.addEventListener('click', () => renderTab(tab.dataset.tab)));
+    renderTab('wallet');
+  }
 
   const adminMode = document.getElementById('adminMode');
   const memberMode = document.getElementById('memberMode');
@@ -206,6 +236,109 @@ document.addEventListener('DOMContentLoaded', () => {
     memberMode.classList.toggle('active', !isAdmin);
   }
 
-  adminMode.addEventListener('click', () => setMode('admin'));
-  memberMode.addEventListener('click', () => setMode('member'));
+  if (adminMode && memberMode) {
+    adminMode.addEventListener('click', () => setMode('admin'));
+    memberMode.addEventListener('click', () => setMode('member'));
+  }
+
+  const rolePortal = document.getElementById('rolePortal');
+
+  function resolveRoleLabel(role) {
+    const labels = {
+      chairman: 'Chairman',
+      financial: 'Financial Secretary',
+      provost: 'Provost',
+      secretary: 'Secretary'
+    };
+    return labels[role] || 'Workspace';
+  }
+
+  if (rolePortal) {
+    const roleTitle = document.getElementById('roleTitle');
+    const roleBadge = document.getElementById('roleBadge');
+    const roleSummary = document.getElementById('roleSummary');
+    const roleActions = document.getElementById('roleActions');
+    const roleLists = document.querySelectorAll('[data-role-list]');
+    const params = new URLSearchParams(window.location.search);
+
+    const selectedRole = (params.get('role') || storedRole || 'chairman').toLowerCase();
+    const org = params.get('org') || storedOrg || 'Assembyl';
+
+    const roleContent = {
+      chairman: {
+        summary:
+          'Top-line governance view with executive snapshot, arrears trends, and meeting readiness checks for leadership briefings.',
+        actions: ['Send pre-read to exco', 'Review arrears spike in Unit B', 'Schedule finance sync'],
+        lists: {
+          priorities: ['Maintain 4.2 month runway', 'Ensure quorum for March GM', 'Track critical risk mitigations'],
+          spotlight: ['3 meetings held last 30 days', 'Arrears reduced by €1,930 in Feb', 'Risk: arrears spike in Unit B']
+        }
+      },
+      financial: {
+        summary:
+          'Financial Secretary workspace with arrears drilldown, cashbook items, and the next workflow steps to clear debt.',
+        actions: ['Post February dues', 'Export ledger snapshot', 'Send arrears notices to high-risk members'],
+        lists: {
+          priorities: ['Reconcile cash vs bank', 'Review levy waiver request', 'Queue audit export'],
+          spotlight: ['€7,540 high-risk arrears', '€3,200 dues batch posted', 'Late fee automation ready']
+        }
+      },
+      provost: {
+        summary:
+          'Provost-first view on attendance enforcement and discipline events to improve meeting compliance.',
+        actions: ['Confirm penalties for absentees', 'Send warning letters', 'Clear validated proxies'],
+        lists: {
+          priorities: ['Reduce late arrivals streak', 'Improve attendance streaks', 'Track penalty collections'],
+          spotlight: ['Penalty €20 issued', 'Warnings queued for late arrivals', 'Proxy misuse cleared']
+        }
+      },
+      secretary: {
+        summary:
+          'Secretary workspace featuring communications, meeting prep, and document dispatch reminders.',
+        actions: ['Publish GM minutes', 'Send reminder for committee updates', 'Upload attendance roll'],
+        lists: {
+          priorities: ['Prep agenda for March GM', 'Coordinate with provost on attendance', 'Notify exco of dues status'],
+          spotlight: ['Minutes draft ready', 'Attendance roll updated', 'Agenda distribution scheduled']
+        }
+      }
+    };
+
+    function hydrateRoleWorkspace(role) {
+      const payload = roleContent[role] || roleContent.chairman;
+      const label = resolveRoleLabel(role);
+      updateOrgLabels(org);
+      localStorage.setItem('assembyl-role', role);
+      localStorage.setItem('assembyl-org', org);
+
+      if (roleTitle) roleTitle.textContent = `${label} workspace`;
+      if (roleBadge) roleBadge.textContent = label;
+      if (roleSummary) roleSummary.textContent = payload.summary;
+
+      if (roleActions) {
+        roleActions.innerHTML = '';
+        payload.actions.forEach((action) => {
+          const item = document.createElement('div');
+          item.className = 'list-item';
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.innerHTML = `<strong>${action}</strong><span class="meta-muted">Action item</span>`;
+          item.appendChild(meta);
+          roleActions.appendChild(item);
+        });
+      }
+
+      roleLists.forEach((list) => {
+        const target = list.dataset.roleList;
+        const values = payload.lists[target] || [];
+        list.innerHTML = '';
+        values.forEach((value) => {
+          const item = document.createElement('li');
+          item.textContent = value;
+          list.appendChild(item);
+        });
+      });
+    }
+
+    hydrateRoleWorkspace(selectedRole);
+  }
 });
