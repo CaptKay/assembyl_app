@@ -1,746 +1,1522 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assembyl | Master Prototype</title>
-
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assembyl | Admin & Member Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-    <!-- Styles -->
     <style>
-        /* --- 1. THEME ENGINE --- */
         :root {
-            --primary: #8B0000;
-            /* Default: Ndi Abia Red */
-            --primary-rgb: 139, 0, 0;
-            --bg-body: #f1f5f9;
+            --primary: #8b0000;
+            --primary-soft: rgba(139, 0, 0, 0.12);
+            --bg-body: #f8fafc;
             --bg-card: #ffffff;
+            --bg-card-strong: #0f172a;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --sidebar-w: 260px;
+            --pill: rgba(15, 23, 42, 0.06);
+            --success: #22c55e;
+            --danger: #ef4444;
+            --sidebar: #0b1221;
+            --shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.22);
         }
 
-        /* Global Reset */
+        [data-theme="dark"] {
+            --bg-body: #0b1221;
+            --bg-card: #0f172a;
+            --bg-card-strong: #111827;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #1f2937;
+            --pill: rgba(255, 255, 255, 0.05);
+            --shadow: 0 14px 50px -15px rgba(0, 0, 0, 0.7);
+        }
+
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
+            margin: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg-body);
             color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
             display: flex;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        input,
-        button {
-            font-family: inherit;
-            outline: none;
-        }
-
-        /* --- 2. LAYOUT UTILITIES --- */
-        .hidden {
-            display: none !important;
-        }
-
-        .flex {
-            display: flex;
-        }
-
-        .flex-col {
-            flex-direction: column;
-        }
-
-        .items-center {
-            align-items: center;
-        }
-
-        .justify-between {
-            justify-content: space-between;
-        }
-
-        .flex-1 {
-            flex: 1;
-        }
-
-        .gap-2 {
-            gap: 8px;
-        }
-
-        .gap-4 {
-            gap: 16px;
-        }
-
-        .p-4 {
-            padding: 16px;
-        }
-
-        .p-6 {
-            padding: 24px;
-        }
-
-        .p-8 {
-            padding: 32px;
-        }
-
-        .mb-4 {
-            margin-bottom: 16px;
-        }
-
-        .mt-auto {
-            margin-top: auto;
-        }
-
-        .text-sm {
-            font-size: 14px;
-        }
-
-        .text-xs {
-            font-size: 12px;
-        }
-
-        .font-bold {
-            font-weight: 700;
-        }
-
-        .font-semibold {
-            font-weight: 600;
-        }
-
-        .text-primary {
+        a {
             color: var(--primary);
+            text-decoration: none;
         }
 
-        .bg-primary {
-            background-color: var(--primary);
-            color: white;
+        .layout {
+            display: flex;
+            width: 100%;
         }
 
-        .rounded-xl {
-            border-radius: 12px;
-        }
-
-        .rounded-full {
-            border-radius: 9999px;
-        }
-
-        .shadow {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .border {
-            border: 1px solid var(--border);
-        }
-
-        /* --- 3. SIDEBAR --- */
+        /* Sidebar */
         aside {
-            width: var(--sidebar-w);
-            background: #0f172a;
-            color: #94a3b8;
+            width: 260px;
+            background: var(--sidebar);
+            color: #cbd5e1;
+            padding: 24px 18px;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
         }
 
-        .brand-area {
-            height: 80px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0 24px;
+        .brand {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .logo-circle {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.8), rgba(139, 0, 0, 0.4));
+            display: grid;
+            place-items: center;
             font-weight: 800;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .brand .meta span {
+            display: block;
+        }
+
+        .brand .meta .label {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .brand .meta .org-name {
+            font-weight: 700;
+            font-size: 18px;
+            color: #e2e8f0;
+        }
+
+        nav {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
         }
 
         .nav-item {
-            padding: 12px 20px;
-            margin: 4px 12px;
-            border-radius: 8px;
-            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: 0.2s;
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
         }
 
         .nav-item:hover {
             background: rgba(255, 255, 255, 0.05);
-            color: white;
+            transform: translateX(3px);
         }
 
         .nav-item.active {
-            background: rgba(var(--primary-rgb), 0.2);
-            color: var(--primary);
+            background: rgba(139, 0, 0, 0.2);
+            color: #fff;
             border-left: 3px solid var(--primary);
         }
 
-        /* --- 4. MAIN CONTENT AREA --- */
+        .sidebar-footer {
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px;
+            border-radius: 12px;
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* Topbar */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            background: var(--bg-body);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 28px;
+        }
+
+        .top-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--pill);
+            border-radius: 14px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+
+        .toggle strong {
+            font-weight: 700;
+        }
+
+        .mode-group {
+            display: inline-flex;
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        /* Role workspace */
+        .role-switch {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .role-btn {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        .role-btn.active {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-color: rgba(139, 0, 0, 0.5);
+            box-shadow: 0 10px 24px -12px rgba(139, 0, 0, 0.5);
+        }
+
+        .role-panel {
+            display: none;
+            margin-top: 16px;
+        }
+
+        .role-panel.active {
+            display: grid;
+            gap: 16px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .mini-table th,
+        .mini-table td {
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mini-table th {
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .mode-btn {
+            padding: 8px 14px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .mode-btn.active {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        /* Main Content */
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            background: var(--bg-body);
+            color: var(--text-main);
         }
 
-        header {
-            height: 70px;
-            background: white;
-            border-bottom: 1px solid var(--border);
+        .content {
+            padding: 28px;
+            display: grid;
+            gap: 20px;
+        }
+
+        .section-head {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 0 32px;
+            align-items: baseline;
+            gap: 12px;
         }
 
-        .content-scroll {
-            flex: 1;
-            overflow-y: auto;
-            padding: 32px;
-            position: relative;
+        .section-head h2 {
+            margin: 0;
+            font-size: 22px;
         }
 
-        /* --- 5. CARDS & WIDGETS --- */
+        .section-head p {
+            margin: 4px 0 0 0;
+            color: var(--text-muted);
+        }
+
         .card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-        }
-
-        .metric-card {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .metric-val {
-            font-size: 32px;
-            font-weight: 800;
-            margin: 8px 0;
-            color: #0f172a;
-        }
-
-        .badge {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .badge-green {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .badge-red {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        /* --- 6. FINANCE LEDGER UI --- */
-        .ledger-layout {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 24px;
-            height: 100%;
-        }
-
-        .member-list {
-            background: white;
             border-radius: 16px;
-            border: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease, border-color 0.3s ease;
         }
 
-        .list-row {
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.1s;
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.35);
         }
 
-        .list-row:hover {
-            background: #f8fafc;
-        }
-
-        .list-row.selected {
-            background: rgba(var(--primary-rgb), 0.05);
-            border-left: 4px solid var(--primary);
-        }
-
-        /* --- 7. ATTENDANCE UI --- */
-        .attendance-grid {
+        .two-col {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        /* Login Gate */
+        .login-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
             gap: 16px;
         }
 
-        .attendee-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .toggle-group {
-            display: flex;
-            background: #f1f5f9;
-            padding: 2px;
-            border-radius: 8px;
-        }
-
-        .toggle-btn {
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            background: transparent;
-            color: #64748b;
-        }
-
-        .toggle-btn.active-present {
-            background: white;
-            color: #16a34a;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .toggle-btn.active-absent {
-            background: white;
-            color: #dc2626;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        /* --- 8. MOBILE PREVIEW (Floating) --- */
-        .mobile-mockup {
-            position: fixed;
-            bottom: 32px;
-            right: 32px;
-            width: 320px;
-            height: 640px;
-            background: #fff;
-            border-radius: 40px;
-            border: 12px solid #1e293b;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-            z-index: 100;
-            transform: scale(0);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        .login-brand {
+            border-radius: 14px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.16), rgba(139, 0, 0, 0.45));
+            color: #fff;
+            min-height: 260px;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
         }
 
-        .mobile-mockup.open {
-            transform: scale(1);
+        .login-brand h3 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
         }
 
-        .notch {
-            height: 30px;
-            background: var(--primary);
-            display: flex;
-            justify-content: center;
-            align-items: end;
-            padding-bottom: 5px;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
+        .login-brand p {
+            margin: 0;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.92);
         }
 
-        .mobile-body {
-            flex: 1;
-            background: #f8fafc;
-            padding: 20px;
-            overflow-y: auto;
+        .login-form {
+            display: grid;
+            gap: 14px;
         }
 
-        .mobile-nav {
-            height: 60px;
-            background: white;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
+        .field {
+            display: grid;
+            gap: 6px;
+        }
+
+        label {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        input,
+        select,
+        button {
+            font-family: inherit;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"],
+        input[type="number"],
+        select {
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.14);
+            outline: none;
+        }
+
+        .btn {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 800;
+            display: inline-flex;
             align-items: center;
+            gap: 10px;
+            justify-content: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* --- 9. THEME SWITCHER --- */
-        .theme-fab {
-            position: fixed;
-            bottom: 32px;
-            left: 32px;
+        .btn-primary {
+            background: linear-gradient(135deg, #8b0000, #600000);
+            color: #fff;
+            box-shadow: 0 12px 25px -12px rgba(139, 0, 0, 0.7);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+        }
+
+        /* KPI Row */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .kpi {
+            display: grid;
+            gap: 6px;
+        }
+
+        .kpi .label {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .kpi .value {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            background: var(--pill);
+            border-radius: 999px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .list {
+            display: grid;
+            gap: 12px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px dashed var(--border);
+            background: var(--bg-card);
+        }
+
+        .list-item .meta {
+            display: grid;
+            gap: 4px;
+        }
+
+        .list-item strong {
+            font-size: 15px;
+        }
+
+        /* Charts */
+        .chart-bars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 12px;
+            align-items: end;
+            height: 220px;
+        }
+
+        .bar-group {
+            display: grid;
+            gap: 8px;
+            justify-items: center;
+        }
+
+        .bar {
+            width: 70%;
+            border-radius: 10px;
+            transition: height 0.3s ease, background 0.3s ease;
+        }
+
+        .bar.collections {
+            background: linear-gradient(180deg, rgba(139, 0, 0, 0.85), rgba(139, 0, 0, 0.65));
+        }
+
+        .bar.arrears {
+            background: linear-gradient(180deg, rgba(239, 68, 68, 0.9), rgba(239, 68, 68, 0.7));
+        }
+
+        .legend {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend i {
+            width: 12px;
+            height: 12px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .attendance {
+            display: grid;
+            gap: 12px;
+        }
+
+        .attendance-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 60px;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .attendance-bar {
+            height: 12px;
+            border-radius: 999px;
+            background: var(--pill);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .attendance-bar span {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #8b0000, #c01b1b);
+        }
+
+        /* Smart Ledger */
+        .ledger {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 16px;
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+
+        .search input {
+            border: none;
+            width: 100%;
+            background: transparent;
+            color: var(--text-main);
+        }
+
+        .member-list {
+            display: grid;
+            gap: 10px;
+            max-height: 360px;
+            overflow: auto;
+            padding-right: 4px;
+        }
+
+        .member {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            gap: 10px;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            background: var(--pill);
+            color: var(--text-muted);
+        }
+
+        .badge.danger { color: var(--danger); }
+        .badge.success { color: var(--success); }
+
+        .form-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        /* Member App Preview */
+        .phone-frame {
+            width: 360px;
+            border-radius: 26px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+        }
+
+        .phone-top {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             gap: 8px;
-            background: white;
-            padding: 8px;
-            border-radius: 99px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        .dot {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
+        .tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
             cursor: pointer;
-            border: 2px solid white;
-            box-shadow: 0 0 0 1px #e2e8f0;
+        }
+
+        .tab.active {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .phone-body {
+            padding: 18px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #8b0000, #4b0a0a);
+            color: #fff;
+            padding: 16px;
+            border-radius: 18px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .timeline {
+            display: grid;
+            gap: 14px;
+        }
+
+        .timeline-item {
+            display: grid;
+            gap: 4px;
+        }
+
+        .meta-muted {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        @media (max-width: 1080px) {
+            aside {
+                display: none;
+            }
+
+            .login-grid,
+            .ledger {
+                grid-template-columns: 1fr;
+            }
+
+        .phone-frame {
+            width: 100%;
+        }
+
+        /* Prototype comparison dock (links between index and index3) */
+        .compare-dock {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 20;
+            display: grid;
+            gap: 6px;
+            width: 220px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 10px 12px;
+            font-size: 13px;
+        }
+
+        .compare-dock h4 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .compare-dock .compare-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .compare-dock a {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 10px;
+            text-align: center;
+            color: inherit;
+            background: var(--pill);
+            font-weight: 600;
+        }
+
+        .compare-dock small {
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
         }
     </style>
 </head>
-
 <body>
-
-    <!-- SIDEBAR -->
-    <aside>
-        <div class="brand-area">
-            <div class="logo-circle">NA</div>
-            <div>
-                <div style="color:white; font-weight:700; font-size:15px;">Ndi Abia Union</div>
-                <div style="color:var(--primary); font-size:11px; font-weight:600; text-transform:uppercase;">Admin
-                    Portal</div>
-            </div>
+    <div class="compare-dock">
+        <h4>Compare prototypes</h4>
+        <div class="compare-actions">
+            <a href="index.html" aria-label="Open Admin & member workspace">index.html</a>
+            <a href="index3.html" aria-label="Open MVP prototype">index3.html</a>
         </div>
-
-        <div style="flex:1; padding: 20px 0;">
-            <div class="nav-item active" onclick="showPage('dashboard', this)">
-                <i class="ph ph-squares-four" style="font-size:20px;"></i> Dashboard
-            </div>
-            <div class="nav-item" onclick="showPage('finance', this)">
-                <i class="ph ph-wallet" style="font-size:20px;"></i> Ledger & Dues
-            </div>
-            <div class="nav-item" onclick="showPage('attendance', this)">
-                <i class="ph ph-users-three" style="font-size:20px;"></i> Attendance
-            </div>
-            <div class="nav-item" onclick="showPage('settings', this)">
-                <i class="ph ph-gear" style="font-size:20px;"></i> Settings
-            </div>
-        </div>
-
-        <div style="padding:24px; text-align:center; border-top:1px solid rgba(255,255,255,0.05);">
-            <p style="font-size:10px; text-transform:uppercase; opacity:0.5; margin-bottom:5px;">Powered By</p>
-            <div style="display:flex; justify-content:center; gap:6px; font-weight:700; color:#cbd5e1;">
-                <div style="width:12px; height:12px; background:#3b82f6; border-radius:2px;"></div> Assembyl
-            </div>
-        </div>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main>
-        <!-- Top Bar -->
-        <header>
-            <h2 id="page-title" class="font-bold text-xl">Dashboard</h2>
-            <div class="flex items-center gap-4">
-                <button onclick="toggleMobile()"
-                    class="text-sm font-bold text-primary border border-primary px-3 py-1 rounded-full hover:bg-primary hover:text-white transition">
-                    📱 Preview Mobile App
-                </button>
-                <div class="flex items-center gap-3">
-                    <div style="text-align:right;">
-                        <p class="text-sm font-bold">Suge Kanu</p>
-                        <p class="text-xs text-muted">Fin. Sec.</p>
-                    </div>
-                    <div style="width:40px; height:40px; background:#cbd5e1; border-radius:50%;"></div>
-                </div>
-            </div>
-        </header>
-
-        <!-- PAGE: DASHBOARD -->
-        <div id="dashboard" class="content-scroll">
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:24px; margin-bottom:32px;">
-                <div class="card metric-card">
-                    <p class="text-xs font-bold text-muted uppercase">Cash in Hand</p>
-                    <h3 class="metric-val">€4,250.00</h3>
-                    <span class="badge badge-green">▲ 12% vs Jan</span>
-                </div>
-                <div class="card metric-card">
-                    <p class="text-xs font-bold text-muted uppercase">Total Arrears</p>
-                    <h3 class="metric-val text-red-600">€1,820.00</h3>
-                    <span class="badge badge-red">Needs Action</span>
-                </div>
-                <div class="card metric-card">
-                    <p class="text-xs font-bold text-muted uppercase">Active Members</p>
-                    <h3 class="metric-val">84</h3>
-                    <span class="badge badge-green">3 New</span>
-                </div>
-            </div>
-
-            <h3 class="font-bold mb-4">Recent Activity</h3>
-            <div class="card" style="padding:0;">
-                <table style="width:100%; text-align:left; border-collapse:collapse;">
-                    <tr style="background:#f8fafc; border-bottom:1px solid var(--border);">
-                        <th class="p-4 text-xs text-muted uppercase">Member</th>
-                        <th class="p-4 text-xs text-muted uppercase">Action</th>
-                        <th class="p-4 text-xs text-muted uppercase">Amount</th>
-                        <th class="p-4 text-xs text-muted uppercase">Date</th>
-                    </tr>
-                    <tr style="border-bottom:1px solid var(--border);">
-                        <td class="p-4 font-bold">Emeka Okonkwo</td>
-                        <td class="p-4">Paid Monthly Dues</td>
-                        <td class="p-4 text-green-600 font-bold">+€50.00</td>
-                        <td class="p-4 text-sm text-muted">Today, 14:20</td>
-                    </tr>
-                    <tr style="border-bottom:1px solid var(--border);">
-                        <td class="p-4 font-bold">Grace Eze</td>
-                        <td class="p-4">Paid Bus Levy</td>
-                        <td class="p-4 text-green-600 font-bold">+€100.00</td>
-                        <td class="p-4 text-sm text-muted">Yesterday</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- PAGE: FINANCE -->
-        <div id="finance" class="content-scroll hidden">
-            <div class="ledger-layout">
-                <!-- Left: List -->
-                <div class="member-list">
-                    <div class="p-4 border-b border-slate-100">
-                        <input type="text" placeholder="Search member..."
-                            style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:#f8fafc;">
-                    </div>
-                    <div style="overflow-y:auto; flex:1;">
-                        <div class="list-row selected">
-                            <div>
-                                <p class="font-bold text-sm">Emeka Okonkwo</p>
-                                <p class="text-xs text-muted">ID: #AB-1024</p>
-                            </div>
-                            <span class="badge badge-red">-€45</span>
-                        </div>
-                        <div class="list-row">
-                            <div>
-                                <p class="font-bold text-sm">Grace Eze</p>
-                                <p class="text-xs text-muted">ID: #AB-1025</p>
-                            </div>
-                            <span class="badge badge-green">€0</span>
-                        </div>
-                        <!-- Repeat -->
-                    </div>
-                </div>
-
-                <!-- Right: Form -->
-                <div class="card" style="display:flex; flex-direction:column;">
-                    <div class="flex justify-between items-start mb-8 border-b border-slate-100 pb-6">
-                        <div>
-                            <h2 class="text-2xl font-bold">Emeka Okonkwo</h2>
-                            <p class="text-sm text-muted">Status: Active</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-xs font-bold text-muted uppercase">Current Debt</p>
-                            <p class="text-2xl font-bold text-red-600">-€45.00</p>
-                        </div>
-                    </div>
-
-                    <div class="mb-8">
-                        <label class="text-xs font-bold text-muted uppercase block mb-2">Amount Received</label>
-                        <div style="position:relative;">
-                            <span
-                                style="position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:24px; color:#cbd5e1;">€</span>
-                            <input type="number" placeholder="0.00"
-                                style="width:100%; padding:16px 16px 16px 40px; font-size:40px; font-weight:bold; border:2px solid var(--border); border-radius:12px;">
-                        </div>
-                    </div>
-
-                    <div class="flex gap-4 mb-8">
-                        <button
-                            class="flex-1 p-6 border-2 border-primary bg-primary text-white rounded-xl font-bold text-lg shadow">
-                            Monthly Dues
-                        </button>
-                        <button
-                            class="flex-1 p-6 border border-slate-200 text-muted rounded-xl font-bold text-lg hover:bg-slate-50">
-                            Levy / Project
-                        </button>
-                    </div>
-
-                    <div class="mt-auto flex gap-4">
-                        <button class="flex-1 p-4 bg-slate-100 text-muted font-bold rounded-xl">Cancel</button>
-                        <button class="flex-[2] p-4 bg-primary text-white font-bold rounded-xl shadow-lg">SAVE & PRINT
-                            RECEIPT</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PAGE: ATTENDANCE -->
-        <div id="attendance" class="content-scroll hidden">
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h2 class="font-bold text-lg">Feb General Meeting</h2>
-                    <p class="text-sm text-muted">Sunday, Feb 1st • 17:00</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-xs font-bold text-muted uppercase">Present</p>
-                    <p class="text-2xl font-bold text-green-600">12 / 84</p>
-                </div>
-            </div>
-
-            <div class="attendance-grid">
-                <!-- Card 1 -->
-                <div class="card attendee-card">
-                    <div class="flex items-center gap-3">
-                        <div style="width:32px; height:32px; background:#cbd5e1; border-radius:50%;"></div>
-                        <span class="font-bold text-sm">Emeka Okonkwo</span>
-                    </div>
-                    <div class="toggle-group">
-                        <button class="toggle-btn active-present">P</button>
-                        <button class="toggle-btn">L</button>
-                        <button class="toggle-btn">A</button>
-                    </div>
-                </div>
-                <!-- Card 2 -->
-                <div class="card attendee-card">
-                    <div class="flex items-center gap-3">
-                        <div style="width:32px; height:32px; background:#cbd5e1; border-radius:50%;"></div>
-                        <span class="font-bold text-sm">Grace Eze</span>
-                    </div>
-                    <div class="toggle-group">
-                        <button class="toggle-btn">P</button>
-                        <button class="toggle-btn">L</button>
-                        <button class="toggle-btn active-absent">A</button>
-                    </div>
-                </div>
-                <!-- Repeat Cards for demo -->
-                <div class="card attendee-card">
-                    <div class="flex items-center gap-3">
-                        <div style="width:32px; height:32px; background:#cbd5e1; border-radius:50%;"></div>
-                        <span class="font-bold text-sm">Chief Obi</span>
-                    </div>
-                    <div class="toggle-group">
-                        <button class="toggle-btn">P</button>
-                        <button class="toggle-btn">L</button>
-                        <button class="toggle-btn">A</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- MOBILE MOCKUP (Member App) -->
-    <div id="mobile-view" class="mobile-mockup">
-        <div class="notch">Assembyl Mobile</div>
-
-        <!-- Mobile Header (Brand Color) -->
-        <div
-            style="background:var(--primary); padding:24px; padding-top:40px; color:white; border-bottom-left-radius:24px; border-bottom-right-radius:24px;">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex gap-2 items-center">
-                    <div
-                        class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center font-bold border border-white/30">
-                        NA</div>
-                    <span class="font-bold text-sm">Ndi Abia</span>
-                </div>
-                <i class="ph-bold ph-bell text-xl"></i>
-            </div>
-            <p class="opacity-80 text-xs mb-1">Welcome,</p>
-            <h2 class="text-2xl font-bold">Chinedu</h2>
-        </div>
-
-        <!-- Mobile Content -->
-        <div class="mobile-body">
-            <!-- ID Card -->
-            <div class="bg-white p-4 rounded-2xl shadow-sm mb-4 border border-slate-100">
-                <div class="flex justify-between mb-4">
-                    <span class="text-xs font-bold text-muted">DIGITAL ID</span>
-                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                </div>
-                <div class="flex gap-4 items-center">
-                    <div style="width:50px; height:50px; background:#cbd5e1; border-radius:12px;"></div>
-                    <div>
-                        <p class="font-bold text-lg">Chinedu Okeke</p>
-                        <p class="text-xs text-muted">ID: 8829220</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Wallet -->
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                <p class="text-xs font-bold text-muted mb-2">YOUR BALANCE</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-2xl font-bold text-red-600">-€50.00</span>
-                    <button class="bg-black text-white px-4 py-2 rounded-full text-xs font-bold">Pay Now</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Nav -->
-        <div class="mobile-nav">
-            <i class="ph-fill ph-house text-primary text-xl"></i>
-            <i class="ph ph-clock-counter-clockwise text-slate-400 text-xl"></i>
-            <i class="ph ph-user text-slate-400 text-xl"></i>
-        </div>
+        <small>
+            Use these links to jump between the richer role workspaces (index.html) and the mobile-friendly MVP mock
+            (index3.html) without losing your place.
+        </small>
     </div>
+    <div class="layout" id="app">
+        <aside>
+            <div class="brand">
+                <div class="logo">AN</div>
+                <div class="meta">
+                    <span class="label">Union</span>
+                    <span class="org-name" data-org="sidebar">Assembyl</span>
+                </div>
+            </div>
+            <nav>
+                <div class="nav-item active"><i class="ph ph-layout"></i> Dashboard</div>
+                <div class="nav-item"><i class="ph ph-wallet"></i> Smart Ledger</div>
+                <div class="nav-item"><i class="ph ph-users"></i> Members</div>
+                <div class="nav-item"><i class="ph ph-gear"></i> Settings</div>
+            </nav>
+            <div class="sidebar-footer">
+                <strong>Guidelines</strong>
+                <div>Dark + Light friendly surfaces</div>
+                <div>Charts updated for the last 4 periods</div>
+            </div>
+        </aside>
+        <main>
+            <header>
+                <div class="topbar">
+                    <div class="top-meta">
+                        <div>
+                            <div class="chip"><i class="ph ph-buildings"></i><span data-org="topbar">Assembyl</span></div>
+                            <div class="meta-muted">Admin Portal · February MVP</div>
+                        </div>
+                    </div>
+                    <div class="top-actions">
+                        <div class="mode-group" aria-label="Admin or Member view toggle">
+                            <button class="mode-btn active" id="adminMode">Admin</button>
+                            <button class="mode-btn" id="memberMode">Member Preview</button>
+                        </div>
+                        <button class="toggle" id="themeToggle" aria-label="Toggle theme">
+                            <span id="themeIcon">🌙</span>
+                            <span><strong>Dark</strong> mode</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
 
-    <!-- THEME SWITCHER -->
-    <div class="theme-fab">
-        <div class="dot" style="background:#8B0000;" onclick="setTheme('#8B0000', 'Ndi Abia Union', 'NA')"></div>
-        <div class="dot" style="background:#008000;" onclick="setTheme('#008000', 'Igbo Union NL', 'IU')"></div>
-        <div class="dot" style="background:#1E3A8A;" onclick="setTheme('#1E3A8A', 'Amstel Social', 'AS')"></div>
+            <div class="content">
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Login Gate</h2>
+                            <p>Secure entry with org detection from email domain.</p>
+                        </div>
+                        <div class="pill">Powered by Assembyl</div>
+                    </div>
+                    <div class="login-grid">
+                        <div class="login-brand">
+                            <div>
+                                <h3>Welcome back</h3>
+                                <p>Secure entry into your union’s financial, attendance, and membership engines.</p>
+                            </div>
+                            <div class="pill" style="background: rgba(255,255,255,0.15); color: #fff;">Two-step verification coming soon</div>
+                        </div>
+                        <form class="login-form" id="loginForm">
+                            <div>
+                                <h3 id="loginTitle">Sign in to Assembyl</h3>
+                                <p class="meta-muted">Detects organization from email domain automatically.</p>
+                            </div>
+                            <div class="field">
+                                <label>Email address</label>
+                                <input type="email" id="emailInput" placeholder="name@yourunion.org" required />
+                            </div>
+                            <div class="field">
+                                <label>Password</label>
+                                <input type="password" placeholder="••••••••" required />
+                            </div>
+                            <div class="field">
+                                <button type="submit" class="btn btn-primary">Login</button>
+                                <a href="mailto:support@assembyl.app" class="meta-muted">Forgot Password?</a>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Role Workspaces</h2>
+                            <p class="meta-muted">Quickly preview tailored workspaces for each executive role.</p>
+                        </div>
+                        <div class="role-switch">
+                            <span class="chip"><i class="ph ph-user-focus"></i> Active role</span>
+                            <button class="role-btn active" data-role="chairman">Chairman</button>
+                            <button class="role-btn" data-role="financial">Financial Secretary</button>
+                            <button class="role-btn" data-role="provost">Provost</button>
+                            <button class="role-btn" data-role="secretary">Secretary</button>
+                        </div>
+                    </div>
+
+                    <div class="role-panel active" data-panel="chairman">
+                        <div class="detail-grid">
+                            <div class="card">
+                                <h3>Executive Snapshot</h3>
+                                <p class="meta-muted">Condensed overview for status calls.</p>
+                                <ul class="list" style="margin-top:10px;">
+                                    <li class="list-item"><div class="meta"><strong>Cash runway</strong><span class="meta-muted">4.2 months (burn €1,010)</span></div><span class="badge success">Stable</span></li>
+                                    <li class="list-item"><div class="meta"><strong>Meetings held</strong><span class="meta-muted">Last 30 days</span></div><span class="badge">3 sessions</span></li>
+                                    <li class="list-item"><div class="meta"><strong>Critical risks</strong><span class="meta-muted">Arrears spike in Unit B</span></div><span class="badge danger">Mitigate</span></li>
+                                </ul>
+                            </div>
+                            <div class="card">
+                                <h3>Attendance detail page</h3>
+                                <p class="meta-muted">Drill into the last meeting with roll call ready.</p>
+                                <table class="mini-table">
+                                    <thead>
+                                        <tr><th>Member</th><th>Status</th><th>Notes</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Chika R.</td><td><span class="badge success">Present</span></td><td>Arrived early, proxy verified</td></tr>
+                                        <tr><td>Ugo A.</td><td><span class="badge">Late</span></td><td>Logged at 19:05 · grace applied</td></tr>
+                                        <tr><td>Kene O.</td><td><span class="badge danger">Absent</span></td><td>Penalty €10 auto-applied</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card">
+                                <h3>Collections vs Arrears detail</h3>
+                                <p class="meta-muted">Month-by-month drilldown used in finance council.</p>
+                                <table class="mini-table">
+                                    <thead>
+                                        <tr><th>Month</th><th>Collections</th><th>Arrears</th><th>Delta</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Nov</td><td>€ 4,120</td><td>€ 6,210</td><td><span class="badge danger">-€ 2,090</span></td></tr>
+                                        <tr><td>Dec</td><td>€ 5,340</td><td>€ 5,480</td><td><span class="badge">-€ 140</span></td></tr>
+                                        <tr><td>Jan</td><td>€ 6,780</td><td>€ 4,890</td><td><span class="badge success">+€ 1,890</span></td></tr>
+                                        <tr><td>Feb</td><td>€ 6,250</td><td>€ 4,320</td><td><span class="badge success">+€ 1,930</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="role-panel" data-panel="financial">
+                        <div class="detail-grid">
+                            <div class="card">
+                                <h3>Cashbook Detail Page</h3>
+                                <p class="meta-muted">Actionable lines for the Financial Secretary.</p>
+                                <table class="mini-table">
+                                    <thead><tr><th>Line</th><th>Category</th><th>Amount</th><th>Status</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Feb dues batch</td><td>Dues</td><td>€ 3,200</td><td><span class="badge success">Posted</span></td></tr>
+                                        <tr><td>Audit export</td><td>Report</td><td>—</td><td><span class="badge">Queued</span></td></tr>
+                                        <tr><td>Levy waiver</td><td>Relief</td><td>-€ 250</td><td><span class="badge danger">Review</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card">
+                                <h3>Debtor drill-down</h3>
+                                <p class="meta-muted">Segmented by risk and duration.</p>
+                                <div class="list">
+                                    <div class="list-item"><div class="meta"><strong>High Risk</strong><span class="meta-muted">Over 90 days</span></div><strong style="color: var(--danger);">€ 7,540</strong></div>
+                                    <div class="list-item"><div class="meta"><strong>Medium Risk</strong><span class="meta-muted">45–90 days</span></div><strong style="color: var(--danger);">€ 5,210</strong></div>
+                                    <div class="list-item"><div class="meta"><strong>Low Risk</strong><span class="meta-muted">Under 45 days</span></div><strong>€ 2,180</strong></div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <h3>Workflow actions</h3>
+                                <p class="meta-muted">Sequence to clear arrears faster.</p>
+                                <ol style="margin:0 0 0 20px; line-height:1.6; color: var(--text-main);">
+                                    <li>Post February dues and reconcile cash vs bank.</li>
+                                    <li>Send arrears notices to high-risk members with pay link.</li>
+                                    <li>Export ledger snapshot for Chairman briefing.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="role-panel" data-panel="provost">
+                        <div class="detail-grid">
+                            <div class="card">
+                                <h3>Attendance enforcement detail</h3>
+                                <p class="meta-muted">Provost-first view of discipline events.</p>
+                                <table class="mini-table">
+                                    <thead><tr><th>Member</th><th>Infraction</th><th>Outcome</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Osita L.</td><td>Missed 2 meetings</td><td><span class="badge danger">Penalty €20</span></td></tr>
+                                        <tr><td>Amara I.</td><td>Late arrival streak</td><td><span class="badge">Warning letter</span></td></tr>
+                                        <tr><td>Chinedu A.</td><td>Proxy misuse flagged</td><td><span class="badge success">Cleared</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card">
+                                <h3>Meeting detail page</h3>
+                                <p class="meta-muted">Logistics and welfare in one place.</p>
+                                <ul class="list" style="margin-top:10px;">
+                                    <li class="list-item"><div class="meta"><strong>Venue</strong><span class="meta-muted">Community Hall 3</span></div><span class="badge">Booked</span></li>
+                                    <li class="list-item"><div class="meta"><strong>Security</strong><span class="meta-muted">Roster confirmed</span></div><span class="badge success">Ready</span></li>
+                                    <li class="list-item"><div class="meta"><strong>Welfare</strong><span class="meta-muted">Refreshments & seating</span></div><span class="badge">In progress</span></li>
+                                </ul>
+                            </div>
+                            <div class="card">
+                                <h3>Provost tasks</h3>
+                                <p class="meta-muted">Actions before the next GM.</p>
+                                <div class="pill" style="margin-bottom:8px;">Auto-reminders for penalties are ON</div>
+                                <ol style="margin:0 0 0 20px; line-height:1.6; color: var(--text-main);">
+                                    <li>Confirm attendance devices are charged.</li>
+                                    <li>Review flagged proxies and clear before roll call.</li>
+                                    <li>Download attendance detail for Chairman briefing.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="role-panel" data-panel="secretary">
+                        <div class="detail-grid">
+                            <div class="card">
+                                <h3>Membership detail page</h3>
+                                <p class="meta-muted">Secretary’s hub with roster health.</p>
+                                <table class="mini-table">
+                                    <thead><tr><th>Segment</th><th>Count</th><th>Notes</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Active</td><td>128</td><td>Up 4 since last quarter</td></tr>
+                                        <tr><td>Travelled</td><td>3</td><td>Leave of absence marked</td></tr>
+                                        <tr><td>Deceased</td><td>2</td><td>Benefits processed</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card">
+                                <h3>Member profile drill-down</h3>
+                                <p class="meta-muted">Attaches to the registry row selection.</p>
+                                <div class="list">
+                                    <div class="list-item"><div class="meta"><strong>Member</strong><span class="meta-muted">Ada Nweke · ID 0452</span></div><span class="badge success">Good standing</span></div>
+                                    <div class="list-item"><div class="meta"><strong>Docs</strong><span class="meta-muted">Passport, address proof</span></div><span class="badge">Verified</span></div>
+                                    <div class="list-item"><div class="meta"><strong>Communication</strong><span class="meta-muted">Prefers email · weekly digest</span></div><span class="badge">Synced</span></div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <h3>Secretary actions</h3>
+                                <p class="meta-muted">Lightweight workflow without leaving the page.</p>
+                                <div class="field">
+                                    <label>Issue invitation</label>
+                                    <input type="text" placeholder="enter email to invite" />
+                                </div>
+                                <div class="field" style="margin-top:10px; display:flex; gap:10px;">
+                                    <button class="btn" style="flex:1; border:1px solid var(--border);">Save Draft</button>
+                                    <button class="btn btn-primary" style="flex:1;">Send Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="section-head">
+                        <div>
+                            <h2>Chairman’s Dashboard</h2>
+                            <p>High-level health of the union with dark/light safe surfaces.</p>
+                        </div>
+                        <div class="pill"><i class="ph ph-seal-check"></i> Updated 2m ago</div>
+                    </div>
+                    <div class="kpi-row">
+                        <div class="card kpi">
+                            <div class="pill"><i class="ph ph-coins"></i> Cash in Hand (This Month)</div>
+                            <div class="value">€ 4,250</div>
+                            <div class="meta-muted">Includes dues, levies & donations</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="pill"><i class="ph ph-trend-down"></i> Total Arrears</div>
+                            <div class="value">€ 18,430</div>
+                            <div class="meta-muted">Across 72 members</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="pill"><i class="ph ph-users-three"></i> Active Membership</div>
+                            <div class="value">128</div>
+                            <div class="meta-muted">3 travelled · 2 deceased</div>
+                        </div>
+                        <div class="card kpi">
+                            <div class="pill"><i class="ph ph-chart-bar"></i> Last Meeting Attendance</div>
+                            <div class="value">78%</div>
+                            <div class="meta-muted">Present: 100 · Late: 14 · Absent fined: 14</div>
+                        </div>
+                    </div>
+
+                    <div class="two-col" style="margin-top: 16px;">
+                        <div class="card">
+                            <div class="section-head">
+                                <div>
+                                    <h3>Recent Activity</h3>
+                                    <p class="meta-muted">Last 5 actions</p>
+                                </div>
+                            </div>
+                            <div class="list">
+                                <div class="list-item">
+                                    <div class="meta"><strong>Chinedu paid €50</strong><span class="meta-muted">Monthly Dues • Just now</span></div>
+                                    <span class="badge success">Inflow</span>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>February General Meeting created</strong><span class="meta-muted">5 min ago</span></div>
+                                    <span class="badge">Schedule</span>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>Late fee updated</strong><span class="meta-muted">10 min ago</span></div>
+                                    <span class="badge danger">Policy</span>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>Audit export emailed</strong><span class="meta-muted">20 min ago</span></div>
+                                    <span class="badge">Report</span>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>New member invited</strong><span class="meta-muted">35 min ago</span></div>
+                                    <span class="badge">Growth</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="section-head">
+                                <div>
+                                    <h3>Debtors Watchlist</h3>
+                                    <p class="meta-muted">Top 5 by amount</p>
+                                </div>
+                                <div class="pill"><i class="ph ph-warning"></i> Red amounts stay red in all modes</div>
+                            </div>
+                            <div class="list">
+                                <div class="list-item">
+                                    <div class="meta"><strong>Obioma N.</strong><span class="meta-muted">Arrears</span></div>
+                                    <strong style="color: var(--danger);">€ 2,340</strong>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>Ngozi E.</strong><span class="meta-muted">Arrears</span></div>
+                                    <strong style="color: var(--danger);">€ 1,980</strong>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>Victor K.</strong><span class="meta-muted">Arrears</span></div>
+                                    <strong style="color: var(--danger);">€ 1,740</strong>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>Amaka O.</strong><span class="meta-muted">Arrears</span></div>
+                                    <strong style="color: var(--danger);">€ 1,120</strong>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>Chika R.</strong><span class="meta-muted">Arrears</span></div>
+                                    <strong style="color: var(--danger);">€ 1,040</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="two-col" style="margin-top: 16px;">
+                        <div class="card">
+                            <div class="section-head">
+                                <div>
+                                    <h3>Collections vs Arrears (Last 4 months)</h3>
+                                    <p class="meta-muted">Quick visual of cash performance vs outstanding debt.</p>
+                                </div>
+                                <div class="legend">
+                                    <span><i style="background:#8b0000"></i>Collections</span>
+                                    <span><i style="background:#ef4444"></i>Total Arrears</span>
+                                </div>
+                            </div>
+                            <div class="chart-bars" id="collectionsChart"></div>
+                        </div>
+                        <div class="card">
+                            <div class="section-head">
+                                <div>
+                                    <h3>Attendance (Last 4 meetings)</h3>
+                                    <p class="meta-muted">Participation trend at a glance.</p>
+                                </div>
+                            </div>
+                            <div class="attendance" id="attendanceList"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Smart Ledger</h2>
+                            <p class="meta-muted">Record payments and view balances in one split view.</p>
+                        </div>
+                        <div class="pill">Designed for keyboard-first entry</div>
+                    </div>
+                    <div class="ledger">
+                        <div class="left">
+                            <div class="search"><i class="ph ph-magnifying-glass"></i><input placeholder="Search members" /></div>
+                            <div class="member-list">
+                                <div class="member">
+                                    <div class="meta">
+                                        <strong>Obinna U.</strong>
+                                        <div class="meta-muted">Balance: € 320</div>
+                                    </div>
+                                    <span class="badge success">Active</span>
+                                </div>
+                                <div class="member">
+                                    <div class="meta">
+                                        <strong>Ijeoma K.</strong>
+                                        <div class="meta-muted">Balance: -€ 180</div>
+                                    </div>
+                                    <span class="badge danger">Arrears</span>
+                                </div>
+                                <div class="member">
+                                    <div class="meta">
+                                        <strong>Chinedu A.</strong>
+                                        <div class="meta-muted">Balance: € 0</div>
+                                    </div>
+                                    <span class="badge">New</span>
+                                </div>
+                                <div class="member">
+                                    <div class="meta">
+                                        <strong>Amara I.</strong>
+                                        <div class="meta-muted">Balance: € 90</div>
+                                    </div>
+                                    <span class="badge success">Active</span>
+                                </div>
+                                <div class="member">
+                                    <div class="meta">
+                                        <strong>Osita L.</strong>
+                                        <div class="meta-muted">Balance: -€ 260</div>
+                                    </div>
+                                    <span class="badge danger">Arrears</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="card" style="box-shadow:none;">
+                                <div class="form-grid">
+                                    <div class="field">
+                                        <label>Member</label>
+                                        <select>
+                                            <option>Choose member</option>
+                                            <option>Obinna U.</option>
+                                            <option>Ijeoma K.</option>
+                                            <option>Chinedu A.</option>
+                                            <option>Amara I.</option>
+                                            <option>Osita L.</option>
+                                        </select>
+                                    </div>
+                                    <div class="field">
+                                        <label>Payment Type</label>
+                                        <select>
+                                            <option>Monthly Dues</option>
+                                            <option>Levy</option>
+                                            <option>Donation</option>
+                                            <option>Penalty</option>
+                                        </select>
+                                    </div>
+                                    <div class="field">
+                                        <label>Amount (€)</label>
+                                        <input type="number" placeholder="0.00" />
+                                    </div>
+                                    <div class="field">
+                                        <label>Notes</label>
+                                        <input type="text" placeholder="e.g., February dues via cash" />
+                                    </div>
+                                    <div class="field" style="display:flex; gap:10px;">
+                                        <button class="btn" style="flex:1; border:1px solid var(--border);">Save as Draft</button>
+                                        <button class="btn btn-primary" style="flex:1;">Post Transaction</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Member Financial Report (Detail Page)</h2>
+                            <p class="meta-muted">Opens from the ledger to show one member’s full statement.</p>
+                        </div>
+                        <div class="pill"><i class="ph ph-identification-badge"></i> Secretary + Financial Secretary view</div>
+                    </div>
+                    <div class="two-col">
+                        <div class="card" style="box-shadow:none;">
+                            <h3>Profile Summary</h3>
+                            <div class="list" style="margin-top:10px;">
+                                <div class="list-item"><div class="meta"><strong>Member</strong><span class="meta-muted">Ada Nweke · ID 0452</span></div><span class="badge success">Good standing</span></div>
+                                <div class="list-item"><div class="meta"><strong>Category</strong><span class="meta-muted">Standard · €50/mo</span></div><span class="badge">Auto reminders on</span></div>
+                                <div class="list-item"><div class="meta"><strong>Contact</strong><span class="meta-muted">ada@union.eu · +31 600 111 222</span></div><span class="badge">Verified</span></div>
+                            </div>
+                            <div class="pill" style="margin-top:12px;">Attendance streak: 4 meetings</div>
+                        </div>
+                        <div class="card" style="box-shadow:none;">
+                            <h3>Statement</h3>
+                            <table class="mini-table">
+                                <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th></tr></thead>
+                                <tbody>
+                                    <tr><td>10 Feb</td><td>Monthly dues</td><td>Debit</td><td>-€ 50</td></tr>
+                                    <tr><td>14 Dec</td><td>Late penalty</td><td>Debit</td><td style="color: var(--danger);">-€ 10</td></tr>
+                                    <tr><td>02 Dec</td><td>Donation</td><td>Credit</td><td style="color: var(--success);">+€ 100</td></tr>
+                                    <tr><td>18 Nov</td><td>Membership dues</td><td>Debit</td><td>-€ 50</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="section-head" style="margin-top:10px;">
+                                <p class="meta-muted">Balance</p>
+                                <strong>€ 780.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Member App Preview</h2>
+                            <p class="meta-muted">Phone frame with Wallet, History, Profile tabs.</p>
+                        </div>
+                        <div class="pill"><i class="ph ph-device-mobile"></i> Responsive mock inside admin</div>
+                    </div>
+                    <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+                        <div class="phone-frame">
+                            <div class="phone-top">
+                                <button class="tab active" data-tab="wallet">Wallet</button>
+                                <button class="tab" data-tab="history">History</button>
+                                <button class="tab" data-tab="profile">Profile</button>
+                            </div>
+                            <div class="phone-body" id="phoneBody"></div>
+                        </div>
+                        <div class="card" style="min-width:260px;">
+                            <h3>Member Quick Facts</h3>
+                            <div class="timeline" style="margin-top:12px;">
+                                <div class="timeline-item">
+                                    <strong>Live balances sync</strong>
+                                    <span class="meta-muted">Wallet total updates when ledger posts</span>
+                                </div>
+                                <div class="timeline-item">
+                                    <strong>Attendance timeline</strong>
+                                    <span class="meta-muted">History tab lists dues + penalties</span>
+                                </div>
+                                <div class="timeline-item">
+                                    <strong>Profile completeness</strong>
+                                    <span class="meta-muted">Members see dues category & contact card</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="footer-note">All UI surfaces respect dark and light modes with high contrast.</div>
+        </main>
     </div>
 
     <script>
-        // 1. Page Switching Logic
-        function showPage(pageId, element) {
-            // Hide all pages
-            document.querySelectorAll('.content-scroll').forEach(el => el.classList.add('hidden'));
-            // Show target page
-            document.getElementById(pageId).classList.remove('hidden');
-            // Update Header
-            const titleMap = { 'dashboard': 'Dashboard', 'finance': 'Financial Ledger', 'attendance': 'Attendance Register', 'settings': 'Settings' };
-            document.getElementById('page-title').innerText = titleMap[pageId];
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const storedTheme = localStorage.getItem('assembyl-theme');
+        const body = document.body;
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const modeLabels = document.querySelectorAll('[data-org]');
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('emailInput');
+        const loginTitle = document.getElementById('loginTitle');
+        const phoneBody = document.getElementById('phoneBody');
+        const tabs = document.querySelectorAll('.tab');
+        const roleButtons = document.querySelectorAll('.role-btn');
+        const rolePanels = document.querySelectorAll('.role-panel');
 
-            // Update Sidebar Active State
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if (element) element.classList.add('active');
+        function setTheme(mode) {
+            if (mode === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '🌙';
+                themeToggle.querySelector('span strong').textContent = 'Dark';
+            } else {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '☀️';
+                themeToggle.querySelector('span strong').textContent = 'Light';
+            }
+            localStorage.setItem('assembyl-theme', mode);
         }
 
-        // 2. Theme Switching Logic
-        function setTheme(color, name, initials) {
-            document.documentElement.style.setProperty('--primary', color);
-            // Convert Hex to RGB for opacity to work
-            const r = parseInt(color.slice(1, 3), 16);
-            const g = parseInt(color.slice(3, 5), 16);
-            const b = parseInt(color.slice(5, 7), 16);
-            document.documentElement.style.setProperty('--primary-rgb', `${r}, ${g}, ${b}`);
+        setTheme(storedTheme || (prefersDark ? 'dark' : 'light'));
 
-            // Update Text
-            document.querySelector('.brand-area div div').innerText = name;
-            document.querySelector('.logo-circle').innerText = initials;
-            document.querySelector('.mobile-mockup .text-sm.font-bold').innerText = name;
-            document.querySelector('.mobile-mockup .w-8').innerText = initials;
+        themeToggle.addEventListener('click', () => {
+            const current = body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        });
+
+        /* Role switching */
+        function setRole(role) {
+            roleButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.role === role));
+            rolePanels.forEach((panel) => panel.classList.toggle('active', panel.dataset.panel === role));
         }
 
-        // 3. Toggle Mobile View
-        function toggleMobile() {
-            document.getElementById('mobile-view').classList.toggle('open');
+        roleButtons.forEach((btn) => btn.addEventListener('click', () => setRole(btn.dataset.role)));
+        setRole('chairman');
+
+        function deriveOrgFromEmail(email) {
+            const domain = (email.split('@')[1] || '').split('.')[0];
+            if (!domain) return 'Assembyl';
+            const mapping = {
+                'abia': 'Abia Union Netherlands',
+                'edo': 'Edo Union',
+                'lagos': 'Lagos Welfare Union',
+                'imo': 'Imo Union Europe'
+            };
+            return mapping[domain.toLowerCase()] || `${domain.charAt(0).toUpperCase()}${domain.slice(1)} Union`;
         }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const org = deriveOrgFromEmail(emailInput.value.trim());
+            updateOrgLabels(org);
+        });
+
+        function updateOrgLabels(org) {
+            modeLabels.forEach((el) => {
+                el.textContent = org;
+            });
+            loginTitle.textContent = `Sign in to ${org}`;
+        }
+
+        /* Charts */
+        const collectionsData = [
+            { month: 'Nov', collections: 3800, arrears: 4100 },
+            { month: 'Dec', collections: 4200, arrears: 3900 },
+            { month: 'Jan', collections: 4600, arrears: 3800 },
+            { month: 'Feb', collections: 4250, arrears: 3600 }
+        ];
+
+        const chartContainer = document.getElementById('collectionsChart');
+        const maxValue = Math.max(...collectionsData.flatMap(d => [d.collections, d.arrears]));
+
+        collectionsData.forEach((item) => {
+            const group = document.createElement('div');
+            group.className = 'bar-group';
+
+            const collectionsBar = document.createElement('div');
+            collectionsBar.className = 'bar collections';
+            collectionsBar.style.height = `${(item.collections / maxValue) * 180 + 30}px`;
+
+            const arrearsBar = document.createElement('div');
+            arrearsBar.className = 'bar arrears';
+            arrearsBar.style.height = `${(item.arrears / maxValue) * 180 + 30}px`;
+
+            const label = document.createElement('div');
+            label.style.fontWeight = '700';
+            label.textContent = item.month;
+
+            group.append(collectionsBar, arrearsBar, label);
+            chartContainer.appendChild(group);
+        });
+
+        const attendanceData = [
+            { label: 'Nov GM', percent: 72 },
+            { label: 'Dec GM', percent: 81 },
+            { label: 'Jan GM', percent: 78 },
+            { label: 'Feb GM', percent: 86 }
+        ];
+
+        const attendanceList = document.getElementById('attendanceList');
+        attendanceData.forEach((row) => {
+            const item = document.createElement('div');
+            item.className = 'attendance-row';
+
+            const label = document.createElement('strong');
+            label.textContent = row.label;
+
+            const bar = document.createElement('div');
+            bar.className = 'attendance-bar';
+            const fill = document.createElement('span');
+            fill.style.width = `${row.percent}%`;
+            bar.appendChild(fill);
+
+            const value = document.createElement('div');
+            value.textContent = `${row.percent}%`;
+            value.style.fontWeight = '700';
+
+            item.append(label, bar, value);
+            attendanceList.appendChild(item);
+        });
+
+        /* Member App Tabs */
+        const phoneScreens = {
+            wallet: `
+                <div class="balance-card">
+                    <div class="meta-muted" style="color: rgba(255,255,255,0.8);">Wallet</div>
+                    <div style="font-size:28px; font-weight:800;">€ 780.00</div>
+                    <div style="display:flex; gap:8px; align-items:center;">Next due: <strong>€ 50</strong> · 2 Mar</div>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>Membership category</strong>
+                        <span class="meta-muted">Standard · Penalty rate €10</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Auto-reminder</strong>
+                        <span class="meta-muted">Push + email 3 days before due date</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Attendance streak</strong>
+                        <span class="meta-muted">4 meetings in a row</span>
+                    </div>
+                </div>
+            `,
+            history: `
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>Feb GM Attendance</strong>
+                        <span class="meta-muted">Marked present · No penalty</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Monthly Dues</strong>
+                        <span class="meta-muted">€50 · Posted Feb 10</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Late Fee</strong>
+                        <span class="meta-muted" style="color: var(--danger);">€10 · Dec GM</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Donation</strong>
+                        <span class="meta-muted">€100 · Welfare Drive</span>
+                    </div>
+                </div>
+            `,
+            profile: `
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>Member</strong>
+                        <span class="meta-muted">Kelechi Eze · Member ID #2198</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Contact</strong>
+                        <span class="meta-muted">+31 61 234 5678 · kelechi@union.eu</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Dues Category</strong>
+                        <span class="meta-muted">Standard (€50/mo) · Joined 2019</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Address</strong>
+                        <span class="meta-muted">Amsterdam, Netherlands</span>
+                    </div>
+                </div>
+            `
+        };
+
+        function renderTab(name) {
+            phoneBody.innerHTML = phoneScreens[name];
+            tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === name));
+        }
+
+        tabs.forEach((tab) => tab.addEventListener('click', () => renderTab(tab.dataset.tab)));
+        renderTab('wallet');
+
+        /* Mode toggles for visual feedback */
+        const adminMode = document.getElementById('adminMode');
+        const memberMode = document.getElementById('memberMode');
+
+        function setMode(target) {
+            const isAdmin = target === 'admin';
+            adminMode.classList.toggle('active', isAdmin);
+            memberMode.classList.toggle('active', !isAdmin);
+        }
+
+        adminMode.addEventListener('click', () => setMode('admin'));
+        memberMode.addEventListener('click', () => setMode('member'));
     </script>
-
 </body>
-
 </html>
