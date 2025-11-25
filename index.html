@@ -203,6 +203,67 @@
             overflow: hidden;
         }
 
+        /* Role workspace */
+        .role-switch {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .role-btn {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        .role-btn.active {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-color: rgba(139, 0, 0, 0.5);
+            box-shadow: 0 10px 24px -12px rgba(139, 0, 0, 0.5);
+        }
+
+        .role-panel {
+            display: none;
+            margin-top: 16px;
+        }
+
+        .role-panel.active {
+            display: grid;
+            gap: 16px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .mini-table th,
+        .mini-table td {
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mini-table th {
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 13px;
+        }
+
         .mode-btn {
             padding: 8px 14px;
             border: none;
@@ -398,6 +459,9 @@
         .list {
             display: grid;
             gap: 12px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
         .list-item {
@@ -638,13 +702,69 @@
                 grid-template-columns: 1fr;
             }
 
-            .phone-frame {
-                width: 100%;
-            }
+        .phone-frame {
+            width: 100%;
+        }
+
+        /* Prototype comparison dock (links between index and index3) */
+        .compare-dock {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 20;
+            display: grid;
+            gap: 6px;
+            width: 220px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 10px 12px;
+            font-size: 13px;
+        }
+
+        .compare-dock h4 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .compare-dock .compare-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .compare-dock a {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 10px;
+            text-align: center;
+            color: inherit;
+            background: var(--pill);
+            font-weight: 600;
+        }
+
+        .compare-dock small {
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
         }
     </style>
 </head>
 <body>
+    <div class="compare-dock">
+        <h4>Compare prototypes</h4>
+        <div class="compare-actions">
+            <a href="index.html" aria-label="Open Admin & member workspace">index.html</a>
+            <a href="index3.html" aria-label="Open MVP prototype">index3.html</a>
+        </div>
+        <small>
+            Use these links to jump between the richer role workspaces (index.html) and the mobile-friendly MVP mock
+            (index3.html) without losing your place.
+        </small>
+    </div>
     <div class="layout" id="app">
         <aside>
             <div class="brand">
@@ -723,6 +843,175 @@
                                 <a href="mailto:support@assembyl.app" class="meta-muted">Forgot Password?</a>
                             </div>
                         </form>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Role Workspaces</h2>
+                            <p class="meta-muted">Quickly preview tailored workspaces for each executive role.</p>
+                        </div>
+                        <div class="role-switch">
+                            <span class="chip"><i class="ph ph-user-focus"></i> Active role</span>
+                            <button class="role-btn active" data-role="chairman">Chairman</button>
+                            <button class="role-btn" data-role="financial">Financial Secretary</button>
+                            <button class="role-btn" data-role="provost">Provost</button>
+                            <button class="role-btn" data-role="secretary">Secretary</button>
+                        </div>
+                    </div>
+
+                    <div class="role-panel active" data-panel="chairman">
+                        <div class="detail-grid">
+                            <div class="card">
+                                <h3>Executive Snapshot</h3>
+                                <p class="meta-muted">Condensed overview for status calls.</p>
+                                <ul class="list" style="margin-top:10px;">
+                                    <li class="list-item"><div class="meta"><strong>Cash runway</strong><span class="meta-muted">4.2 months (burn €1,010)</span></div><span class="badge success">Stable</span></li>
+                                    <li class="list-item"><div class="meta"><strong>Meetings held</strong><span class="meta-muted">Last 30 days</span></div><span class="badge">3 sessions</span></li>
+                                    <li class="list-item"><div class="meta"><strong>Critical risks</strong><span class="meta-muted">Arrears spike in Unit B</span></div><span class="badge danger">Mitigate</span></li>
+                                </ul>
+                            </div>
+                            <div class="card">
+                                <h3>Attendance detail page</h3>
+                                <p class="meta-muted">Drill into the last meeting with roll call ready.</p>
+                                <table class="mini-table">
+                                    <thead>
+                                        <tr><th>Member</th><th>Status</th><th>Notes</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Chika R.</td><td><span class="badge success">Present</span></td><td>Arrived early, proxy verified</td></tr>
+                                        <tr><td>Ugo A.</td><td><span class="badge">Late</span></td><td>Logged at 19:05 · grace applied</td></tr>
+                                        <tr><td>Kene O.</td><td><span class="badge danger">Absent</span></td><td>Penalty €10 auto-applied</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card">
+                                <h3>Collections vs Arrears detail</h3>
+                                <p class="meta-muted">Month-by-month drilldown used in finance council.</p>
+                                <table class="mini-table">
+                                    <thead>
+                                        <tr><th>Month</th><th>Collections</th><th>Arrears</th><th>Delta</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Nov</td><td>€ 4,120</td><td>€ 6,210</td><td><span class="badge danger">-€ 2,090</span></td></tr>
+                                        <tr><td>Dec</td><td>€ 5,340</td><td>€ 5,480</td><td><span class="badge">-€ 140</span></td></tr>
+                                        <tr><td>Jan</td><td>€ 6,780</td><td>€ 4,890</td><td><span class="badge success">+€ 1,890</span></td></tr>
+                                        <tr><td>Feb</td><td>€ 6,250</td><td>€ 4,320</td><td><span class="badge success">+€ 1,930</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="role-panel" data-panel="financial">
+                        <div class="detail-grid">
+                            <div class="card">
+                                <h3>Cashbook Detail Page</h3>
+                                <p class="meta-muted">Actionable lines for the Financial Secretary.</p>
+                                <table class="mini-table">
+                                    <thead><tr><th>Line</th><th>Category</th><th>Amount</th><th>Status</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Feb dues batch</td><td>Dues</td><td>€ 3,200</td><td><span class="badge success">Posted</span></td></tr>
+                                        <tr><td>Audit export</td><td>Report</td><td>—</td><td><span class="badge">Queued</span></td></tr>
+                                        <tr><td>Levy waiver</td><td>Relief</td><td>-€ 250</td><td><span class="badge danger">Review</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card">
+                                <h3>Debtor drill-down</h3>
+                                <p class="meta-muted">Segmented by risk and duration.</p>
+                                <div class="list">
+                                    <div class="list-item"><div class="meta"><strong>High Risk</strong><span class="meta-muted">Over 90 days</span></div><strong style="color: var(--danger);">€ 7,540</strong></div>
+                                    <div class="list-item"><div class="meta"><strong>Medium Risk</strong><span class="meta-muted">45–90 days</span></div><strong style="color: var(--danger);">€ 5,210</strong></div>
+                                    <div class="list-item"><div class="meta"><strong>Low Risk</strong><span class="meta-muted">Under 45 days</span></div><strong>€ 2,180</strong></div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <h3>Workflow actions</h3>
+                                <p class="meta-muted">Sequence to clear arrears faster.</p>
+                                <ol style="margin:0 0 0 20px; line-height:1.6; color: var(--text-main);">
+                                    <li>Post February dues and reconcile cash vs bank.</li>
+                                    <li>Send arrears notices to high-risk members with pay link.</li>
+                                    <li>Export ledger snapshot for Chairman briefing.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                    <div class="role-panel" data-panel="provost">
+                        <div class="detail-grid">
+                            <div class="card">
+                                <h3>Attendance enforcement detail</h3>
+                                <p class="meta-muted">Provost-first view of discipline events.</p>
+                                <table class="mini-table">
+                                    <thead><tr><th>Member</th><th>Infraction</th><th>Outcome</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Osita L.</td><td>Missed 2 meetings</td><td><span class="badge danger">Penalty €20</span></td></tr>
+                                        <tr><td>Amara I.</td><td>Late arrival streak</td><td><span class="badge">Warning letter</span></td></tr>
+                                        <tr><td>Chinedu A.</td><td>Proxy misuse flagged</td><td><span class="badge success">Cleared</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card">
+                                <h3>Meeting detail page</h3>
+                                <p class="meta-muted">Logistics and welfare in one place.</p>
+                                <ul class="list" style="margin-top:10px;">
+                                    <li class="list-item"><div class="meta"><strong>Venue</strong><span class="meta-muted">Community Hall 3</span></div><span class="badge">Booked</span></li>
+                                    <li class="list-item"><div class="meta"><strong>Security</strong><span class="meta-muted">Roster confirmed</span></div><span class="badge success">Ready</span></li>
+                                    <li class="list-item"><div class="meta"><strong>Welfare</strong><span class="meta-muted">Refreshments & seating</span></div><span class="badge">In progress</span></li>
+                                </ul>
+                            </div>
+                            <div class="card">
+                                <h3>Provost tasks</h3>
+                                <p class="meta-muted">Actions before the next GM.</p>
+                                <div class="pill" style="margin-bottom:8px;">Auto-reminders for penalties are ON</div>
+                                <ol style="margin:0 0 0 20px; line-height:1.6; color: var(--text-main);">
+                                    <li>Confirm attendance devices are charged.</li>
+                                    <li>Review flagged proxies and clear before roll call.</li>
+                                    <li>Download attendance detail for Chairman briefing.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="role-panel" data-panel="secretary">
+                        <div class="detail-grid">
+                            <div class="card">
+                                <h3>Membership detail page</h3>
+                                <p class="meta-muted">Secretary’s hub with roster health.</p>
+                                <table class="mini-table">
+                                    <thead><tr><th>Segment</th><th>Count</th><th>Notes</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Active</td><td>128</td><td>Up 4 since last quarter</td></tr>
+                                        <tr><td>Travelled</td><td>3</td><td>Leave of absence marked</td></tr>
+                                        <tr><td>Deceased</td><td>2</td><td>Benefits processed</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card">
+                                <h3>Member profile drill-down</h3>
+                                <p class="meta-muted">Attaches to the registry row selection.</p>
+                                <div class="list">
+                                    <div class="list-item"><div class="meta"><strong>Member</strong><span class="meta-muted">Ada Nweke · ID 0452</span></div><span class="badge success">Good standing</span></div>
+                                    <div class="list-item"><div class="meta"><strong>Docs</strong><span class="meta-muted">Passport, address proof</span></div><span class="badge">Verified</span></div>
+                                    <div class="list-item"><div class="meta"><strong>Communication</strong><span class="meta-muted">Prefers email · weekly digest</span></div><span class="badge">Synced</span></div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <h3>Secretary actions</h3>
+                                <p class="meta-muted">Lightweight workflow without leaving the page.</p>
+                                <div class="field">
+                                    <label>Issue invitation</label>
+                                    <input type="text" placeholder="enter email to invite" />
+                                </div>
+                                <div class="field" style="margin-top:10px; display:flex; gap:10px;">
+                                    <button class="btn" style="flex:1; border:1px solid var(--border);">Save Draft</button>
+                                    <button class="btn btn-primary" style="flex:1;">Send Now</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -940,6 +1229,43 @@
                 <section class="card">
                     <div class="section-head">
                         <div>
+                            <h2>Member Financial Report (Detail Page)</h2>
+                            <p class="meta-muted">Opens from the ledger to show one member’s full statement.</p>
+                        </div>
+                        <div class="pill"><i class="ph ph-identification-badge"></i> Secretary + Financial Secretary view</div>
+                    </div>
+                    <div class="two-col">
+                        <div class="card" style="box-shadow:none;">
+                            <h3>Profile Summary</h3>
+                            <div class="list" style="margin-top:10px;">
+                                <div class="list-item"><div class="meta"><strong>Member</strong><span class="meta-muted">Ada Nweke · ID 0452</span></div><span class="badge success">Good standing</span></div>
+                                <div class="list-item"><div class="meta"><strong>Category</strong><span class="meta-muted">Standard · €50/mo</span></div><span class="badge">Auto reminders on</span></div>
+                                <div class="list-item"><div class="meta"><strong>Contact</strong><span class="meta-muted">ada@union.eu · +31 600 111 222</span></div><span class="badge">Verified</span></div>
+                            </div>
+                            <div class="pill" style="margin-top:12px;">Attendance streak: 4 meetings</div>
+                        </div>
+                        <div class="card" style="box-shadow:none;">
+                            <h3>Statement</h3>
+                            <table class="mini-table">
+                                <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th></tr></thead>
+                                <tbody>
+                                    <tr><td>10 Feb</td><td>Monthly dues</td><td>Debit</td><td>-€ 50</td></tr>
+                                    <tr><td>14 Dec</td><td>Late penalty</td><td>Debit</td><td style="color: var(--danger);">-€ 10</td></tr>
+                                    <tr><td>02 Dec</td><td>Donation</td><td>Credit</td><td style="color: var(--success);">+€ 100</td></tr>
+                                    <tr><td>18 Nov</td><td>Membership dues</td><td>Debit</td><td>-€ 50</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="section-head" style="margin-top:10px;">
+                                <p class="meta-muted">Balance</p>
+                                <strong>€ 780.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
                             <h2>Member App Preview</h2>
                             <p class="meta-muted">Phone frame with Wallet, History, Profile tabs.</p>
                         </div>
@@ -990,6 +1316,8 @@
         const loginTitle = document.getElementById('loginTitle');
         const phoneBody = document.getElementById('phoneBody');
         const tabs = document.querySelectorAll('.tab');
+        const roleButtons = document.querySelectorAll('.role-btn');
+        const rolePanels = document.querySelectorAll('.role-panel');
 
         function setTheme(mode) {
             if (mode === 'dark') {
@@ -1010,6 +1338,15 @@
             const current = body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
             setTheme(current === 'dark' ? 'light' : 'dark');
         });
+
+        /* Role switching */
+        function setRole(role) {
+            roleButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.role === role));
+            rolePanels.forEach((panel) => panel.classList.toggle('active', panel.dataset.panel === role));
+        }
+
+        roleButtons.forEach((btn) => btn.addEventListener('click', () => setRole(btn.dataset.role)));
+        setRole('chairman');
 
         function deriveOrgFromEmail(email) {
             const domain = (email.split('@')[1] || '').split('.')[0];
