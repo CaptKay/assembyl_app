@@ -279,7 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
       chairman: 'Chairman',
       financial: 'Financial Secretary',
       provost: 'Provost',
-      secretary: 'Secretary'
+      secretary: 'Secretary',
+      general: 'General Secretary'
     };
     return labels[role] || 'Workspace';
   }
@@ -330,6 +331,15 @@ document.addEventListener('DOMContentLoaded', () => {
         lists: {
           priorities: ['Prep agenda for March GM', 'Coordinate with provost on attendance', 'Notify exco of dues status'],
           spotlight: ['Minutes draft ready', 'Attendance roll updated', 'Agenda distribution scheduled']
+        }
+      },
+      general: {
+        summary:
+          'General Secretary workspace focused on dispatches, meeting readiness, and clear communication to exco and members.',
+        actions: ['Send GM reminder to full roster', 'Upload updated attendance roll', 'Attach finance annex to agenda packet'],
+        lists: {
+          priorities: ['Finalize GM agenda and motions', 'Sync with provost on attendance roll', 'Circulate briefing pack with arrears snapshot'],
+          spotlight: ['Weekly digest delivered to exco', 'Agenda draft ready for review', '12 member queries awaiting response']
         }
       }
     };
