@@ -849,3 +849,88 @@ select:focus {
   }
 
 }
+
+/* Members page */
+.chip.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-main);
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--pill);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.avatar.danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--danger);
+}
+
+.avatar.warning {
+  background: rgba(234, 179, 8, 0.16);
+  color: #ca8a04;
+}
+
+.member-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.member-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.member-name {
+  font-weight: 800;
+}
+
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.summary-block {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: var(--bg-card);
+  display: grid;
+  gap: 6px;
+}
+
+.action-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--bg-card);
+  display: grid;
+  gap: 6px;
+}
