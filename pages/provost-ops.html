@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Provost workspace | Assembyl</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+    <div class="layout" id="roleLanding" data-destination="provost-ops">
+        <aside>
+            <div class="brand">
+                <div class="logo">AN</div>
+                <div class="meta">
+                    <span class="label">Union</span>
+                    <span class="org-name" data-org="sidebar">Assembyl</span>
+                </div>
+            </div>
+            <nav>
+                <div class="nav-item active"><i class="ph ph-layout"></i> Provost workspace</div>
+                <div class="nav-item"><i class="ph ph-check"></i> Actions</div>
+                <div class="nav-item"><i class="ph ph-files"></i> Documents</div>
+            </nav>
+            <div class="sidebar-footer">
+                <strong>Guidelines</strong>
+                <div>Role routes follow your permission level</div>
+                <div>Org name follows your login</div>
+            </div>
+        </aside>
+        <main>
+            <header>
+                <div class="topbar">
+                    <div class="top-meta">
+                        <div>
+                            <div class="chip"><i class="ph ph-buildings"></i><span data-org="topbar">Assembyl</span></div>
+                            <div class="meta-muted">Executive workspace</div>
+                        </div>
+                    </div>
+                    <div class="top-actions">
+                        <div class="chip" id="landingBadge">Operations</div>
+                        <button class="toggle" id="themeToggle" aria-label="Toggle theme">
+                            <span id="themeIcon">🌙</span>
+                            <span><strong>Dark</strong> mode</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <section class="card hero">
+                    <div class="hero-text">
+                        <div class="pill">Signed in</div>
+                        <h1 id="landingTitle">Provost workspace</h1>
+                        <p id="landingSummary" class="meta-muted">Discipline and attendance enforcement center with penalty tracking.</p>
+                        <div class="hero-actions">
+                            <a class="btn btn-primary" href="../index.html">Switch account</a>
+                            <a class="btn" href="../index.html">Back to portal preview</a>
+                        </div>
+                    </div>
+                    <div class="hero-card">
+                        <div class="pill" style="width:max-content;">Today</div>
+                        <h3>Quick wins</h3>
+                        <div class="list" id="landingActions"></div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Permissions</h2>
+                            <p class="meta-muted">What you can do with this role and permission level.</p>
+                        </div>
+                    </div>
+                    <ul class="simple-list" id="landingPermissions"></ul>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="../assets/app.js"></script>
+</body>
+</html>

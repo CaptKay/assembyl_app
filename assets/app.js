@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const storedTheme = localStorage.getItem('assembyl-theme');
   const storedOrg = localStorage.getItem('assembyl-org');
   const storedRole = localStorage.getItem('assembyl-role');
+  const storedPermission = localStorage.getItem('assembyl-permission');
   const body = document.body;
   const themeToggle = document.getElementById('themeToggle');
   const themeIcon = document.getElementById('themeIcon');
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const emailInput = document.getElementById('emailInput');
   const loginTitle = document.getElementById('loginTitle');
   const roleSelect = document.getElementById('roleSelect');
+  const permissionSelect = document.getElementById('permissionSelect');
   const phoneBody = document.getElementById('phoneBody');
   const tabs = document.querySelectorAll('.tab');
   const roleButtons = document.querySelectorAll('.role-btn');
@@ -77,16 +79,45 @@ document.addEventListener('DOMContentLoaded', () => {
     roleSelect.value = storedRole;
   }
 
+  if (permissionSelect && storedPermission) {
+    permissionSelect.value = storedPermission;
+  }
+
   if (loginForm) {
     loginForm.addEventListener('submit', (event) => {
       event.preventDefault();
       const org = deriveOrgFromEmail(emailInput.value.trim());
       const role = roleSelect ? roleSelect.value : 'chairman';
+      const permission = permissionSelect ? permissionSelect.value : 'operations';
       localStorage.setItem('assembyl-org', org);
       localStorage.setItem('assembyl-role', role);
+      localStorage.setItem('assembyl-permission', permission);
       updateOrgLabels(org);
-      const query = `role=${encodeURIComponent(role)}&org=${encodeURIComponent(org)}`;
-      window.location.href = `role-portal.html?${query}`;
+
+      const roleRoutes = {
+        chairman: {
+          full: 'pages/chairman-admin.html',
+          operations: 'pages/chairman-ops.html'
+        },
+        financial: {
+          full: 'pages/chairman-admin.html',
+          operations: 'pages/financial-ops.html'
+        },
+        provost: {
+          full: 'pages/chairman-admin.html',
+          operations: 'pages/provost-ops.html'
+        },
+        secretary: {
+          full: 'pages/chairman-admin.html',
+          operations: 'pages/secretary-ops.html'
+        }
+      };
+
+      const destination = permission === 'viewer'
+        ? 'pages/read-only.html'
+        : (roleRoutes[role] && roleRoutes[role][permission]) || 'pages/chairman-ops.html';
+
+      window.location.href = destination;
     });
   }
 
@@ -340,5 +371,108 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     hydrateRoleWorkspace(selectedRole);
+  }
+
+  const landingShell = document.querySelector('[data-destination]');
+
+  if (landingShell) {
+    const destination = landingShell.dataset.destination;
+    const landingTitle = document.getElementById('landingTitle');
+    const landingSummary = document.getElementById('landingSummary');
+    const landingActions = document.getElementById('landingActions');
+    const landingPermissions = document.getElementById('landingPermissions');
+    const landingBadge = document.getElementById('landingBadge');
+
+    const org = storedOrg || 'Assembyl';
+    const role = storedRole || 'chairman';
+    const permission = storedPermission || 'operations';
+
+    const landingContent = {
+      'chairman-admin': {
+        title: 'Chairman workspace',
+        summary:
+          'Full executive view with governance dashboards, arrears oversight, and the ability to switch into any workspace.',
+        badge: 'Admin',
+        actions: ['Open governance dashboard', 'Review arrears across all units', 'Delegate tasks to other executives'],
+        permissions: ['Full access to all workspaces', 'Can approve financial actions and penalties', 'Switch between roles without re-login']
+      },
+      'chairman-ops': {
+        title: 'Chairman operations view',
+        summary: 'Leadership snapshot with the key governance items needed for status calls and meetings.',
+        badge: 'Operations',
+        actions: ['View arrears trend', 'Check attendance compliance', 'Share briefing pack with exec team'],
+        permissions: ['View governance dashboard', 'See arrears and attendance detail', 'No financial approvals']
+      },
+      'financial-ops': {
+        title: 'Financial Secretary workspace',
+        summary: 'Finance-first view with arrears drilldowns, ledger export options, and posting controls.',
+        badge: 'Operations',
+        actions: ['Post dues batch', 'Queue audit export', 'Send arrears notices to high-risk members'],
+        permissions: ['Can post dues and levies', 'Export ledger snapshots', 'No access to role switching']
+      },
+      'provost-ops': {
+        title: 'Provost workspace',
+        summary: 'Discipline and attendance enforcement center with penalty tracking.',
+        badge: 'Operations',
+        actions: ['Validate attendance roll', 'Issue penalties for absences', 'Send warning messages'],
+        permissions: ['Manage attendance records', 'Apply penalties', 'Cannot edit finance entries']
+      },
+      'secretary-ops': {
+        title: 'Secretary workspace',
+        summary: 'Communications and documentation flow for meetings and follow-ups.',
+        badge: 'Operations',
+        actions: ['Publish minutes and agenda', 'Update document repository', 'Notify executives of new uploads'],
+        permissions: ['Manage meeting documentation', 'Send communications', 'Cannot change financial data']
+      },
+      'read-only': {
+        title: 'Viewer workspace',
+        summary: 'Read-only experience for auditors or observers to review progress without editing.',
+        badge: 'Viewer',
+        actions: ['Browse dashboards', 'Review arrears snapshot', 'Download approved documents'],
+        permissions: ['Read-only access to workspaces', 'No approvals or posting rights', 'Can export view-only reports']
+      }
+    };
+
+    const payload = landingContent[destination] || landingContent['read-only'];
+    updateOrgLabels(org);
+
+    if (landingTitle) {
+      landingTitle.textContent = payload.title;
+      document.title = `${payload.title} | Assembyl`;
+    }
+
+    if (landingSummary) {
+      landingSummary.textContent = payload.summary;
+    }
+
+    if (landingBadge) {
+      landingBadge.textContent = `${payload.badge} · ${resolveRoleLabel(role)}`;
+    }
+
+    if (landingActions) {
+      landingActions.innerHTML = '';
+      payload.actions.forEach((action) => {
+        const item = document.createElement('div');
+        item.className = 'list-item';
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.innerHTML = `<strong>${action}</strong><span class="meta-muted">Suggested action</span>`;
+        item.appendChild(meta);
+        landingActions.appendChild(item);
+      });
+    }
+
+    if (landingPermissions) {
+      landingPermissions.innerHTML = '';
+      payload.permissions.forEach((line) => {
+        const li = document.createElement('li');
+        li.textContent = line;
+        landingPermissions.appendChild(li);
+      });
+    }
+
+    if (permission === 'viewer' && destination !== 'read-only') {
+      window.location.href = 'read-only.html';
+    }
   }
 });
