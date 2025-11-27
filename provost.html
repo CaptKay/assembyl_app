@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Provost command center for attendance discipline, penalties, and meeting readiness." />
+    <title>Assembyl | Provost Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <div class="layout" id="provostPage">
+        <aside>
+            <div class="brand">
+                <div class="logo">AN</div>
+                <div class="meta">
+                    <span class="label">Union</span>
+                    <span class="org-name" data-org="sidebar">Assembyl</span>
+                </div>
+            </div>
+            <nav>
+                <div class="nav-item active"><i class="ph ph-shield"></i> Provost overview</div>
+                <div class="nav-item"><i class="ph ph-check"></i> Meeting readiness</div>
+                <div class="nav-item"><i class="ph ph-warning"></i> Penalties & incidents</div>
+                <div class="nav-item"><i class="ph ph-users"></i> Members</div>
+            </nav>
+            <div class="sidebar-footer">
+                <strong>Discipline guardrails</strong>
+                <div>Enforce attendance policies</div>
+                <div>Keep penalties transparent</div>
+            </div>
+        </aside>
+
+        <main>
+            <header>
+                <div class="topbar">
+                    <div class="top-meta">
+                        <div>
+                            <div class="chip"><i class="ph ph-buildings"></i><span data-org="topbar">Assembyl</span></div>
+                            <div class="meta-muted">Provost Command Center</div>
+                        </div>
+                    </div>
+                    <div class="top-actions">
+                        <div class="chip" style="gap:6px;"><i class="ph ph-user-focus"></i> Provost</div>
+                        <button class="toggle" id="themeToggle" aria-label="Toggle theme">
+                            <span id="themeIcon">🌙</span>
+                            <span><strong>Dark</strong> mode</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <section class="card hero">
+                    <div class="hero-text">
+                        <div class="pill">Discipline overview</div>
+                        <h1>Provost control room</h1>
+                        <p class="meta-muted">Attendance enforcement, penalties, and meeting readiness in one focused view.</p>
+                        <div class="hero-actions">
+                            <a class="btn btn-primary" href="role-portal.html?role=provost">Open provost workspace</a>
+                            <a class="btn" href="index.html">Back to portal</a>
+                        </div>
+                    </div>
+                    <div class="hero-card">
+                        <div class="pill" style="width:max-content;">Action queue</div>
+                        <div class="list">
+                            <div class="list-item"><div class="meta"><strong>Confirm penalties</strong><span class="meta-muted">12 members flagged</span></div><span class="badge danger">Due</span></div>
+                            <div class="list-item"><div class="meta"><strong>Send warnings</strong><span class="meta-muted">6 late arrivals</span></div><span class="badge">Today</span></div>
+                            <div class="list-item"><div class="meta"><strong>Proxy review</strong><span class="meta-muted">3 awaiting validation</span></div><span class="badge success">On track</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="kpi-row">
+                    <div class="card kpi">
+                        <div class="pill"><i class="ph ph-activity"></i> Attendance compliance</div>
+                        <div class="value">84%</div>
+                        <div class="meta-muted">Up 6 pts vs last GM</div>
+                    </div>
+                    <div class="card kpi">
+                        <div class="pill"><i class="ph ph-warning-octagon"></i> Penalties confirmed</div>
+                        <div class="value">18</div>
+                        <div class="meta-muted">€310 total · €20 max each</div>
+                    </div>
+                    <div class="card kpi">
+                        <div class="pill"><i class="ph ph-envelope-open"></i> Warnings issued</div>
+                        <div class="value">6</div>
+                        <div class="meta-muted">Auto-scheduled 48 hrs before GM</div>
+                    </div>
+                    <div class="card kpi">
+                        <div class="pill"><i class="ph ph-user-switch"></i> Proxy flags</div>
+                        <div class="value">3</div>
+                        <div class="meta-muted">2 in Unit B · 1 cleared</div>
+                    </div>
+                </div>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Meeting readiness</h2>
+                            <p class="meta-muted">Checklist and trends for the next General Meeting.</p>
+                        </div>
+                        <div class="pill"><i class="ph ph-calendar-check"></i> GM scheduled for 12 Mar</div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="card">
+                            <h3>Next meeting checklist</h3>
+                            <p class="meta-muted">Everything the provost needs to lock down discipline.</p>
+                            <ul class="simple-list" style="margin-top:10px;">
+                                <li>Attendance devices charged and assigned</li>
+                                <li>Security roster confirmed with secretary</li>
+                                <li>Penalty automation toggled on for absentees</li>
+                                <li>Proxy validations reviewed before roll call</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3>Attendance compliance trend</h3>
+                            <p class="meta-muted">Four meeting view with target line at 80%.</p>
+                            <div class="attendance">
+                                <div class="attendance-row">
+                                    <strong>Nov GM</strong>
+                                    <div class="attendance-bar"><span style="width:72%"></span></div>
+                                    <div style="font-weight:700;">72%</div>
+                                </div>
+                                <div class="attendance-row">
+                                    <strong>Dec GM</strong>
+                                    <div class="attendance-bar"><span style="width:78%"></span></div>
+                                    <div style="font-weight:700;">78%</div>
+                                </div>
+                                <div class="attendance-row">
+                                    <strong>Jan GM</strong>
+                                    <div class="attendance-bar"><span style="width:80%"></span></div>
+                                    <div style="font-weight:700;">80%</div>
+                                </div>
+                                <div class="attendance-row">
+                                    <strong>Feb GM</strong>
+                                    <div class="attendance-bar"><span style="width:86%"></span></div>
+                                    <div style="font-weight:700;">86%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Guardrails</h3>
+                            <p class="meta-muted">Policy controls managed by the provost.</p>
+                            <div class="list">
+                                <div class="list-item"><div class="meta"><strong>Late threshold</strong><span class="meta-muted">10 minutes then penalty</span></div><span class="badge">Active</span></div>
+                                <div class="list-item"><div class="meta"><strong>Auto-reminders</strong><span class="meta-muted">Email + SMS 24h before</span></div><span class="badge success">Enabled</span></div>
+                                <div class="list-item"><div class="meta"><strong>Proxy rules</strong><span class="meta-muted">One proxy per unit</span></div><span class="badge">Monitored</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Enforcement & penalties</h2>
+                            <p class="meta-muted">Transparent ledger, timeline, and follow-ups for discipline actions.</p>
+                        </div>
+                        <div class="pill"><i class="ph ph-clipboard-text"></i> Audit ready</div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="card">
+                            <h3>Penalty ledger</h3>
+                            <p class="meta-muted">Review before confirming to finance.</p>
+                            <table class="mini-table">
+                                <thead><tr><th>Member</th><th>Reason</th><th>Amount</th><th>Status</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Osita L.</td><td>Missed 2 meetings</td><td>€ 20</td><td><span class="badge danger">Awaiting</span></td></tr>
+                                    <tr><td>Amara I.</td><td>Late arrival streak</td><td>€ 10</td><td><span class="badge">Warning</span></td></tr>
+                                    <tr><td>Chinedu A.</td><td>Proxy misuse</td><td>€ 0</td><td><span class="badge success">Cleared</span></td></tr>
+                                    <tr><td>Ugo A.</td><td>Left early</td><td>€ 15</td><td><span class="badge danger">Confirm</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card">
+                            <h3>Enforcement timeline</h3>
+                            <p class="meta-muted">Recent discipline actions with next steps.</p>
+                            <div class="list">
+                                <div class="list-item">
+                                    <div class="meta"><strong>Warnings sent</strong><span class="meta-muted">6 members · auto email + SMS</span></div>
+                                    <span class="badge success">Completed</span>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>Penalty notice draft</strong><span class="meta-muted">Chairman copy attached</span></div>
+                                    <span class="badge">Review</span>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>Proxy investigation</strong><span class="meta-muted">Unit B follow-up scheduled</span></div>
+                                    <span class="badge danger">Due</span>
+                                </div>
+                                <div class="list-item">
+                                    <div class="meta"><strong>Attendance export</strong><span class="meta-muted">For finance reconciliation</span></div>
+                                    <span class="badge success">Sent</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Member incidents</h3>
+                            <p class="meta-muted">Track notes before escalating.</p>
+                            <ul class="simple-list" style="margin-top:10px;">
+                                <li>Unit C reported crowding at roll call · mitigated</li>
+                                <li>2 guests requested seats · tagged for welfare</li>
+                                <li>Attendance devices need replacement batteries</li>
+                                <li>Security wants earlier headcount export</li>
+                            </ul>
+                            <div class="field" style="margin-top:12px;">
+                                <label>Add note</label>
+                                <input type="text" placeholder="Log an incident or follow-up" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="assets/app.js"></script>
+</body>
+</html>
