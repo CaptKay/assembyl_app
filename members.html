@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Member directory, filters, and financial status overview for Assembyl." />
+    <title>Assembyl | Members</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <div class="layout" id="membersPage">
+        <aside>
+            <div class="brand">
+                <div class="logo">AN</div>
+                <div class="meta">
+                    <span class="label">Union</span>
+                    <span class="org-name" data-org="sidebar">Assembyl</span>
+                </div>
+            </div>
+            <nav>
+                <div class="nav-item"><i class="ph ph-layout"></i> Dashboard</div>
+                <div class="nav-item"><i class="ph ph-wallet"></i> Smart Ledger</div>
+                <div class="nav-item active"><i class="ph ph-users"></i> Members</div>
+                <div class="nav-item"><i class="ph ph-gear"></i> Settings</div>
+            </nav>
+            <div class="sidebar-footer">
+                <strong>Guidelines</strong>
+                <div>Member rosters sync with arrears and attendance</div>
+                <div>Dark + Light friendly surfaces</div>
+            </div>
+        </aside>
+        <main>
+            <header>
+                <div class="topbar">
+                    <div class="top-meta">
+                        <div>
+                            <div class="chip"><i class="ph ph-users"></i><span data-org="topbar">Assembyl</span></div>
+                            <div class="meta-muted">Member directory & health</div>
+                        </div>
+                    </div>
+                    <div class="top-actions">
+                        <button class="btn-primary">Add member</button>
+                        <button class="toggle" id="themeToggle" aria-label="Toggle theme">
+                            <span id="themeIcon">🌙</span>
+                            <span><strong>Dark</strong> mode</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h2>Membership health</h2>
+                            <p>Snapshot of current roster strength, arrears, and onboarding.</p>
+                        </div>
+                        <div class="pill">Last sync: 5 mins ago</div>
+                    </div>
+                    <div class="kpi-row">
+                        <div class="kpi">
+                            <div class="label">Active members</div>
+                            <div class="value">142</div>
+                            <div class="meta-muted">Total roster across all units</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="label">In good standing</div>
+                            <div class="value">117</div>
+                            <div class="meta-muted">Cleared dues & attendance streak</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="label">Arrears exposure</div>
+                            <div class="value" style="color: var(--danger);">€ 7,540</div>
+                            <div class="meta-muted">Sum of over-60-day balances</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="label">Onboarding</div>
+                            <div class="value" style="color: var(--success);">6 pending</div>
+                            <div class="meta-muted">Awaiting verification + dues setup</div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="two-col">
+                    <section class="card">
+                        <div class="section-head">
+                            <div>
+                                <h3>Roster & filters</h3>
+                                <p>Search, segment, and drill into member financial posture.</p>
+                            </div>
+                            <div class="pill"><i class="ph ph-funnel"></i> Applied filters: Unit B, Arrears</div>
+                        </div>
+                        <div class="filter-row">
+                            <div class="search" aria-label="Search members">
+                                <i class="ph ph-magnifying-glass"></i>
+                                <input type="text" placeholder="Search name, unit, or email" />
+                            </div>
+                            <div class="chip ghost">Status: Arrears</div>
+                            <div class="chip ghost">Unit: B</div>
+                            <div class="chip ghost">Sort: Highest risk</div>
+                        </div>
+                        <div class="member-list">
+                            <div class="member">
+                                <div class="member-meta">
+                                    <div class="avatar danger">UE</div>
+                                    <div>
+                                        <div class="member-name">Uche Eze</div>
+                                        <div class="meta-muted">Unit B · Last paid Feb 4</div>
+                                    </div>
+                                </div>
+                                <div class="member-status">
+                                    <div class="badge danger">High arrears</div>
+                                    <div class="pill">€ 1,230 outstanding</div>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-meta">
+                                    <div class="avatar">CN</div>
+                                    <div>
+                                        <div class="member-name">Chinelo Nwosu</div>
+                                        <div class="meta-muted">Unit A · Attendance streak: 5</div>
+                                    </div>
+                                </div>
+                                <div class="member-status">
+                                    <div class="badge success">Good standing</div>
+                                    <div class="pill">€ 0 arrears</div>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-meta">
+                                    <div class="avatar">EM</div>
+                                    <div>
+                                        <div class="member-name">Emeka Madu</div>
+                                        <div class="meta-muted">Unit C · Paid Feb 12</div>
+                                    </div>
+                                </div>
+                                <div class="member-status">
+                                    <div class="badge success">Up to date</div>
+                                    <div class="pill">€ 0 arrears</div>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-meta">
+                                    <div class="avatar warning">AA</div>
+                                    <div>
+                                        <div class="member-name">Adaeze Akor</div>
+                                        <div class="meta-muted">Unit B · Pending verification</div>
+                                    </div>
+                                </div>
+                                <div class="member-status">
+                                    <div class="badge">Onboarding</div>
+                                    <div class="pill">Docs pending</div>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-meta">
+                                    <div class="avatar danger">SO</div>
+                                    <div>
+                                        <div class="member-name">Samuel Okoye</div>
+                                        <div class="meta-muted">Unit D · Last paid Jan 2</div>
+                                    </div>
+                                </div>
+                                <div class="member-status">
+                                    <div class="badge danger">At risk</div>
+                                    <div class="pill">€ 980 outstanding</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="card">
+                        <div class="section-head">
+                            <div>
+                                <h3>Member drill-down</h3>
+                                <p>Financial and attendance signals for the selected member.</p>
+                            </div>
+                            <div class="pill">Receipt-ready exports</div>
+                        </div>
+                        <div class="profile-header">
+                            <div class="avatar danger">UE</div>
+                            <div>
+                                <div class="member-name">Uche Eze</div>
+                                <div class="meta-muted">Member ID: AN-024 · Unit B</div>
+                                <div class="chip ghost">High arrears</div>
+                            </div>
+                            <div class="profile-actions">
+                                <button class="btn-primary">Generate receipt</button>
+                                <button class="chip ghost">Send reminder</button>
+                            </div>
+                        </div>
+                        <div class="detail-grid">
+                            <div class="summary-block">
+                                <div class="label">Balance due</div>
+                                <div class="value" style="color: var(--danger);">€ 1,230</div>
+                                <div class="meta-muted">Includes levies + Jan/Feb dues</div>
+                            </div>
+                            <div class="summary-block">
+                                <div class="label">Attendance</div>
+                                <div class="value">58%</div>
+                                <div class="meta-muted">Late to 2 of last 5 meetings</div>
+                            </div>
+                            <div class="summary-block">
+                                <div class="label">Next action</div>
+                                <div class="value">Payment plan</div>
+                                <div class="meta-muted">Propose €205/mo over 6 months</div>
+                            </div>
+                        </div>
+                        <div class="two-col">
+                            <div>
+                                <h4>Recent payments</h4>
+                                <table class="mini-table">
+                                    <thead>
+                                        <tr><th>Date</th><th>Type</th><th>Amount</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Feb 4</td><td>Dues</td><td>€ 120</td></tr>
+                                        <tr><td>Jan 12</td><td>Welfare levy</td><td>€ 80</td></tr>
+                                        <tr><td>Dec 22</td><td>Donation</td><td>€ 50</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <h4>Risk signals</h4>
+                                <ul class="list">
+                                    <li>Last receipt shared 45 days ago</li>
+                                    <li>Outstanding pledge for Building Fund</li>
+                                    <li>Prefers WhatsApp reminders</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <section class="card">
+                    <div class="section-head">
+                        <div>
+                            <h3>Engagement queue</h3>
+                            <p>Next best actions for membership retention and arrears recovery.</p>
+                        </div>
+                        <div class="pill">Auto-prioritized</div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="action-card">
+                            <div class="chip ghost">High priority</div>
+                            <h4>Send arrears notices to high-risk members</h4>
+                            <p class="meta-muted">Queue WhatsApp + email notices with payment links.</p>
+                        </div>
+                        <div class="action-card">
+                            <div class="chip ghost">Follow-up</div>
+                            <h4>Verify onboarding docs for 6 pending</h4>
+                            <p class="meta-muted">Confirm IDs and activate dues autopay.</p>
+                        </div>
+                        <div class="action-card">
+                            <div class="chip ghost">Reminder</div>
+                            <h4>Prepare attendance roll for March GM</h4>
+                            <p class="meta-muted">Align with provost to flag repeat late arrivals.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script defer src="assets/app.js"></script>
+</body>
+</html>
