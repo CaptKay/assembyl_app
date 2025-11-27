@@ -109,6 +109,7 @@ nav {
   padding: 12px 14px;
   border-radius: 12px;
   color: #e2e8f0;
+  text-decoration: none;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 }
